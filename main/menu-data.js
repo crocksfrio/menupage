@@ -119,10 +119,11 @@ const MENU_DATA = {
     doces: {
         titulo: "Sobremesas & Doces",
         destaques_extra: {
-            titulo: "Combos em Destaque",
+            titulo: "Outras Bebidas",
             itens: [
-                { nome: "Alegria a Dois", preco: "49,90", desc: "2x Clássico + 1 Fatia de Torta" },
-                { nome: "Clássico Crocks", preco: "25,90", desc: "1x Clássico + Cookie ou Brownie" }
+                { nome: "Água S/ Gás", preco: "4,90" },
+                    { nome: "Água C/ Gás", preco: "5,90" },
+                    { nome: "Refrigerantes", preco: "6,90" }
             ]
         },
         milkshake: {
@@ -158,12 +159,11 @@ const MENU_DATA = {
                 ]
             },
             {
-                titulo: "Bebidas",
+                titulo: "Rings & Donuts",
                 cor: "orange",
                 itens: [
-                    { nome: "Água S/ Gás", preco: "4,90" },
-                    { nome: "Água C/ Gás", preco: "5,90" },
-                    { nome: "Refrigerantes", preco: "6,90" }
+                    { nome: "Ring Chocolate", preco: "16,90" },
+                    { nome: "Ring Frutas Vermelhas", preco: "16,90" },
                 ]
             }
         ]
