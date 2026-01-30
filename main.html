@@ -35,7 +35,7 @@
             font-weight: 800;
             white-space: nowrap !important;
             display: inline-block;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
         }
 
         .media-container img {
@@ -85,13 +85,13 @@
         </div>
 
         <!-- Barra de Progresso -->
-        <div class="h-1.5 w-full bg-gray-100 absolute bottom-0 left-0 z-30">
+        <div class="h-0.5 w-full bg-gray-100 absolute bottom-0 left-0 z-30">
             <div id="progress-bar" class="h-full bg-teal-500 w-0 transition-all duration-[linear]"></div>
         </div>
     </div>
 
     <script>
-        const SLIDE_DURATION = 15000;
+        const SLIDE_DURATION = 3000;
         const DEFAULT_DATA = { sorvetes: { titulo: "Sorvetes", itens: [], servicos: [] }, cafeteria: { titulo: "Café", itens: [] }, salgados: { titulo: "Salgados", itens: [], destaques: [] }, doces: { titulo: "Doces", milkshake: {}, petit_gateau: {}, outros: [] } };
         function getSafeData() { return (typeof MENU_DATA !== 'undefined') ? MENU_DATA : DEFAULT_DATA; }
 
@@ -105,7 +105,7 @@
                         const color = colors[idx % colors.length];
                         const highlight = item.destaque ? `ring-2 ring-teal-100 bg-teal-50/10` : `bg-white`;
                         return `<div class="${highlight} p-4 rounded-xl shadow-sm border-l-4 border-${color}-400 flex flex-col justify-between h-32">
-                            <div><h3 class="item-title uppercase truncate">${item.nome}${item.destaque ? '<span class="ml-2 text-[8px] bg-yellow-400 px-1 rounded align-top">TOP</span>' : ''}</h3>
+                            <div><h3 class="item-title uppercase truncate">${item.nome}${item.destaque ? '<span class="ml-2 text-[8px] bg-yellow-400 px-1 rounded align-top">MAIS PEDIDO</span>' : ''}</h3>
                             <p class="item-desc" style="font-size:${item.tamanho_fonte}">${item.desc}</p></div>
                             <div class="text-right"><span class="price-tag">R$ ${item.preco}</span></div>
                         </div>`;
@@ -113,11 +113,11 @@
 
                     const services = d.servicos.map(s => `
                         <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 rounded-full overflow-hidden border border-teal-100 mb-1">
+                            <div class="w-15 h-15 rounded-full overflow-hidden border border-teal-100 mb-1">
                                 <img src="${s.img}" onerror="this.src='https://placehold.co/100x100?text=S'" class="w-full h-full object-cover">
                             </div>
-                            <span class="text-[9px] font-bold uppercase text-gray-500">${s.nome}</span>
-                            <span class="text-[10px] font-black text-teal-600">${s.preco}</span>
+                            <span class="text-[15px] font-bold uppercase text-gray-500">${s.nome}</span>
+                            <span class="text-[20px] font-black text-teal-600">${s.preco}</span>
                         </div>
                     `).join('');
 
@@ -139,7 +139,7 @@
                     const salg = data.salgados;
                     const cafeItems = cafe.itens.map(i => `<div class="flex justify-between items-center bg-white p-3 rounded-lg border-b border-gray-50 shadow-sm">
                         <div class="leading-tight"><span class="font-bold text-gray-800 text-lg">${i.nome}</span><p class="text-[11px] text-gray-400" style="font-size:${i.tamanho_fonte}">${i.desc}</p></div>
-                        <span class="text-xl font-black text-amber-700 ml-2">R$ ${i.preco}</span>
+                        <span class="text-xl font-black text-amber-700 ml-3 flex-shrink-0 text-right">R$ ${i.preco}</span>
                     </div>`).join('');
                     const salgItems = salg.itens.slice(0, 5).map(i => `<div class="flex justify-between items-center py-1.5 border-b border-dashed border-gray-200">
                         <span class="font-bold text-sm text-gray-700 truncate">${i.nome}</span><span class="font-black text-lg text-gray-900 ml-2">R$ ${i.preco}</span>
@@ -172,16 +172,18 @@
                                     <div class="flex justify-between bg-white p-2 rounded shadow-sm text-xs font-bold"><span>${ms.g.tamanho}</span><span class="text-pink-600">R$ ${ms.g.preco}</span></div>
                                 </div>
                             </div>
-                            <div class="col-span-7 bg-amber-900 rounded-2xl p-4 text-white flex flex-col justify-center relative shadow-lg" style="background-image:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('${pg.img_fundo}'); background-size:cover;">
+                            <div class="col-span-7 bg-amber-900 rounded-2xl p-4 text-white flex flex-col justify-between relative shadow-lg min-h-[350px]" style="background-image: url('${pg.img_fundo}'); background-size:cover;" background-position: center;">
+                            <div>
                                 <h3 class="text-2xl font-display font-bold text-shadow uppercase">${pg.titulo}</h3>
                                 <p class="text-[10px] text-amber-200 uppercase mb-2" style="font-size:${pg.tamanho_fonte}">${pg.desc}</p>
+                            </div>
                                 <div class="text-right"><span class="text-3xl font-black text-yellow-400 text-shadow">R$ ${pg.preco}</span></div>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-3">
                             ${doces.outros.map(g => `<div class="bg-white p-3 rounded-xl shadow-sm border-t-4 border-${g.cor}-400">
-                                <h4 class="font-black text-[10px] text-gray-700 uppercase mb-1">${g.titulo}</h4>
-                                ${g.itens ? g.itens.map(i => `<div class="flex justify-between text-[9px] mb-0.5 border-b border-gray-50 pb-0.5"><span>${i.nome}</span><span class="font-bold">R$ ${i.preco}</span></div>`).join('') : `<div class="text-right font-black text-lg text-${g.cor}-600">R$ ${g.preco}</div>`}
+                                <h4 class="font-black text-[15px] text-gray-700 uppercase mb-1">${g.titulo}</h4>
+                                ${g.itens ? g.itens.map(i => `<div class="flex justify-between text-[14px] mb-0.5 border-b border-gray-50 pb-0.5"><span>${i.nome}</span><span class="font-bold">R$ ${i.preco}</span></div>`).join('') : `<div class="text-right font-black text-lg text-${g.cor}-600">R$ ${g.preco}</div>`}
                             </div>`).join('')}
                         </div>
                     </div>`;

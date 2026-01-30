@@ -13,14 +13,14 @@ const MENU_DATA = {
                 desc: "2x Clássico + 1 Fatia de Torta",
                 preco_de: "57,70",
                 preco: "49,90",
-                tamanho_fonte: "0.9rem"
+                tamanho_fonte: "1rem"
             },
             {
                 nome: "Clássico Crocks",
                 desc: "1x Clássico + Cookie ou Brownie",
                 preco_de: "27,80",
                 preco: "25,90",
-                tamanho_fonte: "0.9rem"
+                tamanho_fonte: "1rem"
             }
         ]
     },
@@ -30,15 +30,15 @@ const MENU_DATA = {
             {
                 nome: "Mini",
                 desc: "1 Bola (90g). Desejo rápido e delicioso.",
-                preco: "10,90",
-                tamanho_fonte: "0.95rem",
+                preco: "11,90",
+                tamanho_fonte: "1.1rem",
                 destaque: false
             },
             {
                 nome: "Clássico",
                 desc: "2 Bolas (180g). A dupla perfeita de sabores.",
                 preco: "18,90",
-                tamanho_fonte: "0.95rem",
+                tamanho_fonte: "1.1rem",
                 destaque: true,
                 tag: "O MAIS PEDIDO"
             },
@@ -46,22 +46,22 @@ const MENU_DATA = {
                 nome: "Master",
                 desc: "3 Bolas (270g). Três bolas de pura felicidade!",
                 preco: "27,90",
-                tamanho_fonte: "0.95rem",
+                tamanho_fonte: "1.1rem",
                 destaque: false
             },
             {
                 nome: "Extra Premium",
                 desc: "4 Bolas (360g). Experiência inesquecível de sabor.",
                 preco: "35,90",
-                tamanho_fonte: "0.95rem",
+                tamanho_fonte: "1.1rem",
                 destaque: false
             }
         ],
         servicos: [
-            { nome: "Cascão", preco: "R$ 5,50", img: "main/cascao.jpg" },
-            { nome: "Casquinha", preco: "R$ 3,50", img: "main/casquinha.jpg" },
-            { nome: "Cestinha", preco: "R$ 6,50", img: "main/cestinha.jpg" },
-            { nome: "Cobertura", preco: "R$ 3,00", img: "main/cobertura.jpg" }
+            { nome: "Pote (padrão)", preco: "Incluso", img: "main/pote.jpg" },
+            { nome: "Pote + Casquinho", preco: "+R$ 0,99", img: "main/potecasquinho.jpg" },
+            { nome: "Cestinha de Biscoito", preco: "+R$ 2,30", img: "main/cestinha.jpg" },
+            { nome: "Cascão de Biscoito", preco: "+R$ 1,90", img: "main/cascao.jpg" }
         ]
     },
     cafeteria: {
@@ -72,27 +72,27 @@ const MENU_DATA = {
                 nome: "Expresso",
                 desc: "Curto ou Longo (50ml). Intenso.",
                 preco: "7,50",
-                tamanho_fonte: "0.9rem",
+                tamanho_fonte: "1rem",
                 icone: "coffee"
             },
             {
                 nome: "Expresso c/ Chantilly",
                 desc: "O clássico com toque de cremosidade.",
                 preco: "10,90",
-                tamanho_fonte: "0.9rem"
+                tamanho_fonte: "1rem"
             },
             {
                 nome: "Cappuccino",
                 desc: "Leite vaporizado, pó de preparo e canela.",
                 preco: "16,90",
-                tamanho_fonte: "0.9rem",
+                tamanho_fonte: "1rem",
                 icone: "mug-hot"
             },
             {
                 nome: "Mocaccino",
                 desc: "Chocolate, leite vaporizado e expresso.",
                 preco: "17,90",
-                tamanho_fonte: "0.9rem"
+                tamanho_fonte: "1rem"
             }
         ]
     },
@@ -124,7 +124,7 @@ const MENU_DATA = {
             desc: "Bolinho quente com recheio cremoso e uma bola de sorvete.",
             preco: "24,90",
             tamanho_fonte: "0.95rem",
-            img_fundo: "main/petit-gateau-bg.jpg"
+            img_fundo: "main/petitgateau.jpg"
         },
         outros: [
             {
@@ -135,21 +135,21 @@ const MENU_DATA = {
                     { nome: "Cookie Belga", preco: "12,90" },
                     { nome: "Brownie Tradicional", preco: "13,90" }
                 ],
-                tamanho_fonte: "0.85rem"
+                tamanho_fonte: "1.95rem"
             },
             {
                 titulo: "Tortas Finas",
                 desc: "Fatias selecionadas",
                 cor: "pink",
                 preco: "16,90",
-                tamanho_fonte: "0.9rem"
+                tamanho_fonte: "1.95rem"
             },
             {
                 titulo: "Chás (150ml)",
                 desc: "Quente ou Gelado",
                 cor: "orange",
                 preco: "4,90",
-                tamanho_fonte: "0.85rem"
+                tamanho_fonte: "1.95rem"
             }
         ]
     }
