@@ -1,38 +1,57 @@
 /**
  * CONFIGURAÇÃO DO CARDÁPIO - CROCKS FRIO
- * Você pode ajustar preços, nomes e o TAMANHO DA FONTE de cada descrição.
- * Use unidades como '14px', '1rem' ou '0.9rem'.
+ * Engenharia de cardápio aplicada com base no documento oficial.
+ * Ajustado para escala de 32" para evitar quebras de texto.
  */
 
 const MENU_DATA = {
+    combos: {
+        titulo: "Combos Especiais",
+        itens: [
+            {
+                nome: "Alegria a Dois",
+                desc: "2x Clássico + 1 Fatia de Torta",
+                preco_de: "57,70",
+                preco: "49,90",
+                tamanho_fonte: "0.9rem"
+            },
+            {
+                nome: "Clássico Crocks",
+                desc: "1x Clássico + Cookie ou Brownie",
+                preco_de: "27,80",
+                preco: "25,90",
+                tamanho_fonte: "0.9rem"
+            }
+        ]
+    },
     sorvetes: {
         titulo: "Sorvetes Artesanais",
         itens: [
             {
                 nome: "Mini",
-                desc: "1 Bola (Aprox. 90g). O tamanho perfeito para um desejo rápido e delicioso.",
+                desc: "1 Bola (90g). Desejo rápido e delicioso.",
                 preco: "10,90",
                 tamanho_fonte: "0.95rem",
                 destaque: false
             },
             {
                 nome: "Clássico",
-                desc: "2 Bolas (Aprox. 180g). A dupla perfeita para combinar sabores.",
+                desc: "2 Bolas (180g). A dupla perfeita de sabores.",
                 preco: "18,90",
-                tamanho_fonte: "1rem",
+                tamanho_fonte: "0.95rem",
                 destaque: true,
                 tag: "O MAIS PEDIDO"
             },
             {
                 nome: "Master",
-                desc: "3 Bolas (Aprox. 270g). Três bolas de pura felicidade para sua tarde!",
+                desc: "3 Bolas (270g). Três bolas de pura felicidade!",
                 preco: "27,90",
                 tamanho_fonte: "0.95rem",
                 destaque: false
             },
             {
                 nome: "Extra Premium",
-                desc: "4 Bolas (Aprox. 360g). Uma experiência inesquecível de sabor e textura.",
+                desc: "4 Bolas (360g). Experiência inesquecível de sabor.",
                 preco: "35,90",
                 tamanho_fonte: "0.95rem",
                 destaque: false
@@ -51,23 +70,23 @@ const MENU_DATA = {
         itens: [
             {
                 nome: "Expresso",
-                desc: "Curto ou Longo. Intenso e encorpado.",
+                desc: "Curto ou Longo (50ml). Intenso.",
                 preco: "7,50",
-                tamanho_fonte: "1rem",
+                tamanho_fonte: "0.9rem",
                 icone: "coffee"
             },
             {
-                nome: "Cappuccino",
-                desc: "Leite vaporizado, café expresso e canela.",
-                preco: "14,90",
-                tamanho_fonte: "0.9rem",
-                icone: "mug-hot"
+                nome: "Expresso c/ Chantilly",
+                desc: "O clássico com toque de cremosidade.",
+                preco: "10,90",
+                tamanho_fonte: "0.9rem"
             },
             {
-                nome: "Chocolate Quente",
-                desc: "Cremoso e reconfortante para dias frios.",
-                preco: "13,90",
-                tamanho_fonte: "0.9rem"
+                nome: "Cappuccino",
+                desc: "Leite vaporizado, pó de preparo e canela.",
+                preco: "16,90",
+                tamanho_fonte: "0.9rem",
+                icone: "mug-hot"
             },
             {
                 nome: "Mocaccino",
@@ -78,31 +97,33 @@ const MENU_DATA = {
         ]
     },
     salgados: {
-        titulo: "Salgados",
+        titulo: "Delícias Salgadas",
         itens: [
             { nome: "Coxinha de Frango", preco: "8,90" },
             { nome: "Coxinha c/ Requeijão", preco: "9,90" },
             { nome: "Pão de Queijo (2 und)", preco: "9,90" },
+            { nome: "Mini Croissants (2 und)", preco: "5,90" },
             { nome: "Croissant Simples", preco: "9,90" }
         ],
         destaques: [
-            { nome: "Croissant de Frango", preco: "18,90", icone: "bread-slice" },
-            { nome: "Croissant Carne", preco: "21,90", icone: "utensils" }
+            { nome: "Croissant Frango / Requeijão", preco: "18,90", icone: "bread-slice" },
+            { nome: "Croissant Carne / Requeijão", preco: "21,90", icone: "utensils" },
+            { nome: "Croissant Queijo do Reino", preco: "23,90", icone: "cheese" }
         ]
     },
     doces: {
         titulo: "Sobremesas & Doces",
         milkshake: {
             titulo: "Milkshake Crocks",
-            desc: "Bebida ultra cremosa feita com nosso sorvete artesanal",
+            desc: "Ultra cremoso com sorvete artesanal",
             p: { tamanho: "300ml", preco: "19,90" },
             g: { tamanho: "500ml", preco: "25,90" }
         },
         petit_gateau: {
             titulo: "Petit Gâteau",
-            desc: "Bolinho quente de chocolate com recheio cremoso, servido com uma bola de sorvete à sua escolha.",
+            desc: "Bolinho quente com recheio cremoso e uma bola de sorvete.",
             preco: "24,90",
-            tamanho_fonte: "1.05rem",
+            tamanho_fonte: "0.95rem",
             img_fundo: "main/petit-gateau-bg.jpg"
         },
         outros: [
@@ -124,13 +145,10 @@ const MENU_DATA = {
                 tamanho_fonte: "0.9rem"
             },
             {
-                titulo: "Chás Especiais",
+                titulo: "Chás (150ml)",
                 desc: "Quente ou Gelado",
                 cor: "orange",
-                itens: [
-                    { nome: "Hibisco / Verde", preco: "4,90" },
-                    { nome: "Morango / Laranja", preco: "4,90" }
-                ],
+                preco: "4,90",
                 tamanho_fonte: "0.85rem"
             }
         ]
