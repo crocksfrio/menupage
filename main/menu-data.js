@@ -109,11 +109,11 @@ const MENU_DATA = {
         ],
         destaques: [
             { nome: "Croissants Simples", preco: "R$ 9,90" },
-            { nome: "Croissant Peito de Peru c/ Queijo", preco: "16,90" },
-            { nome: "Croissant Frango c/ Requeijão", preco: "18,90" },
+            { nome: "Peito Peru c/ Queijo", preco: "16,90" },
+            { nome: "Frango c/ Requeijão", preco: "18,90" },
             //{ nome: "Croissant Carne c/ Requeijão", preco: "21,90" },
-            { nome: "Croissant Peito Peru c/ Queijo do Reino", preco: "22,90" },
-            { nome: "Croissant Queijo do Reino", preco: "23,90" }
+            { nome: "Peito Peru c/ Queijo do Reino", preco: "22,90" },
+            { nome: "Queijo do Reino", preco: "23,90" }
         ]
     },
     doces: {
