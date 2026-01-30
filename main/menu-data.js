@@ -85,7 +85,7 @@ const MENU_DATA = {
                 tamanho_fonte: "0.9rem"
             },
             {
-                nome: "Café Filtrado",
+                nome: "Filtrado",
                 desc: "Tradicional, suave e saboroso.",
                 preco: "8,90",
                 tamanho_fonte: "0.9rem"
@@ -96,12 +96,12 @@ const MENU_DATA = {
                 preco: "13,90",
                 tamanho_fonte: "0.9rem"
             },
-            {
-                nome: "Cappuccino Cremoso",
-                desc: "Leite vaporizado, pó de preparo e canela.",
-                preco: "16,90",
-                tamanho_fonte: "0.9rem"
-            },
+           // {
+            //    nome: "Cappuccino Cremoso",
+            //    desc: "Leite vaporizado, pó de preparo e canela.",
+            //    preco: "16,90",
+            //    tamanho_fonte: "0.9rem"
+           // },
             {
                 nome: "Chás (Gelado ou Quente)",
                 desc: "Hibisco, Camomila com Maracujá, Verde, Morango com Laranja, Abacaxi com Hortelã.",

@@ -172,8 +172,8 @@
                                 <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
                                     <h3 class="text-lg font-black text-pink-800 mb-1 uppercase">${ms.titulo}</h3>
                                     <div class="space-y-2">
-                                        <div class="flex justify-between bg-white p-2 rounded shadow-sm text-[20px] font-bold"><span>${ms.p.tamanho}</span><span class="text-[18px] text-pink-600">R$ ${ms.p.preco}</span></div>
-                                        <div class="flex justify-between bg-white p-2 rounded shadow-sm text-[20px] font-bold"><span>${ms.g.tamanho}</span><span class="text-[18px] text-pink-600">R$ ${ms.g.preco}</span></div>
+                                        <div class="flex justify-between p-2 rounded text-[18px] font-bold"><span>${ms.p.tamanho}</span><span class="text-[16px] text-pink-600">R$ ${ms.p.preco}</span></div>
+                                        <div class="flex justify-between p-2 rounded text-[18px] font-bold"><span>${ms.g.tamanho}</span><span class="text-[16px] text-pink-600">R$ ${ms.g.preco}</span></div>
                                     </div>
                                 </div>
                                 <div class="bg-teal-50 p-3 rounded-2xl border border-teal-100 flex-1">
@@ -181,8 +181,8 @@
                                     ${extra.itens.map(c => `
                                         <div class="mb-2 last:mb-0">
                                             <div class="flex justify-between items-baseline">
-                                                <span class="text-[20px] font-bold text-gray-700">${c.nome}</span>
-                                                <span class="text-[18px] font-black text-teal-600">R$ ${c.preco}</span>
+                                                <span class="text-[18px] font-bold text-gray-700">${c.nome}</span>
+                                                <span class="text-[16px] font-black text-teal-600">R$ ${c.preco}</span>
                                             </div>
                                             <p class="text-[8px] text-gray-400 leading-none">${c.desc}</p>
                                         </div>
@@ -200,7 +200,7 @@
                         <div class="grid grid-cols-3 gap-3">
                             ${doces.outros.map(g => `<div class="bg-white p-3 rounded-xl shadow-sm border-t-4 border-${g.cor}-400">
                                 <h4 class="font-black text-lg text-gray-700 uppercase mb-1">${g.titulo}</h4>
-                                ${g.itens ? g.itens.map(i => `<div class="flex justify-between text-[20px] mb-0.5 border-b border-gray-50 pb-0.5"><span>${i.nome}</span><span class="font-bold flex-shrink-0">R$ ${i.preco}</span></div>`).join('') : `<div class="text-right font-black text-[18px] text-${g.cor}-600 flex-shrink-0">R$ ${g.preco}</div>`}
+                                ${g.itens ? g.itens.map(i => `<div class="flex justify-between text-[18px] mb-0.5 border-b border-gray-50 pb-0.5"><span>${i.nome}</span><span class="font-bold flex-shrink-0 text-[16px">R$ ${i.preco}</span></div>`).join('') : `<div class="text-right font-black text-[16px] text-${g.cor}-600 flex-shrink-0">R$ ${g.preco}</div>`}
                             </div>`).join('')}
                         </div>
                     </div>`;
