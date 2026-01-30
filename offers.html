@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crocks Frio - Ofertas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #111;
+            overflow: hidden;
+            cursor: none;
+        }
+        .font-display { font-family: 'Fredoka', sans-serif; }
+        
+        .kenburns {
+            animation: kenburns 20s infinite alternate;
+        }
+
+        @keyframes kenburns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        .strike-price {
+            position: relative;
+            display: inline-block;
+        }
+        .strike-price::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -5%;
+            width: 110%;
+            height: 3px;
+            background: #ef4444;
+            transform: rotate(-10deg);
+        }
+        
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="w-screen h-screen relative">
+
+    <!-- Container do Background (Imagem) -->
+    <div id="bg-container" class="absolute inset-0 z-0">
+        <img id="bg-image" src="" class="w-full h-full object-cover kenburns filter brightness-75 transition-opacity duration-1000" alt="Background">
+    </div>
+
+    <!-- Overlay de Gradiente -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+
+    <!-- Container do Conteúdo -->
+    <div class="absolute inset-0 z-20 flex items-center px-20">
+        
+        <!-- Cartão da Oferta -->
+        <div id="offer-card" class="w-[500px] glass-card rounded-3xl p-10 animate__animated animate__fadeInLeft">
+            
+            <div class="bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest w-max mb-4">
+                Combo Especial
+            </div>
+
+            <h1 id="offer-title" class="text-5xl font-display font-bold text-gray-900 leading-tight mb-4">
+                Nome do Combo
+            </h1>
+
+            <p id="offer-desc" class="text-gray-600 text-xl mb-8 leading-relaxed">
+                Descrição do combo...
+            </p>
+
+            <div class="flex flex-col gap-2">
+                <div class="text-gray-500 text-2xl font-bold">
+                    De <span id="price-old" class="strike-price">R$ 00,00</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-teal-600">POR APENAS</span>
+                    <span id="price-new" class="text-7xl font-display font-bold text-red-600 tracking-tighter">R$ 00,00</span>
+                </div>
+            </div>
+
+            <div class="mt-8 border-t border-gray-200 pt-6 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <p class="text-sm text-gray-500">Peça já no balcão!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Indicadores de Slide -->
+    <div class="absolute bottom-10 left-20 z-30 flex gap-2" id="indicators">
+        <!-- JS gera os bolinhas aqui -->
+    </div>
+
+    <!-- Logo Cantinho -->
+    <div class="absolute top-10 right-10 z-30 opacity-80">
+         <h2 class="text-3xl font-display font-bold text-white drop-shadow-lg">Crocks Frio</h2>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO
+        const SLIDE_INTERVAL = 10000; // 10 Segundos por oferta
+
+        // DADOS DAS OFERTAS (Extraídos do PDF)
+        const offers = [
+            {
+                title: "Alegria a Dois",
+                desc: "2x Sorvetes Clássicos + Fatia de Torta. A combinação perfeita para dividir!",
+                oldPrice: "57,70",
+                newPrice: "49,90",
+                // Imagem local (pasta 'offers') com fallback online
+                image: "offers/combo1.jpg",
+                fallback: "https://images.unsplash.com/photo-1560008581-09826d1de69e?auto=format&fit=crop&w=1600&q=80"
+            },
+            {
+                title: "Clássico Crocks",
+                desc: "1 Sorvete Clássico + Cookie Belga ou Brownie. Crocância e cremosidade.",
+                oldPrice: "27,80",
+                newPrice: "25,90",
+                image: "offers/combo2.jpg",
+                fallback: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=1600&q=80"
+            },
+            {
+                title: "Clássico Cremoso",
+                desc: "1 Café Especial + Sorvete Clássico. O equilíbrio entre o quente e o frio.",
+                oldPrice: "27,80",
+                newPrice: "24,90",
+                image: "offers/combo3.jpg",
+                fallback: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=1600&q=80"
+            },
+            {
+                title: "Expresso & Mini",
+                desc: "Sorvete Mini + Expresso. A dose rápida de felicidade.",
+                oldPrice: "20,80",
+                newPrice: "17,90",
+                image: "offers/combo4.jpg",
+                fallback: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        // Elementos do DOM
+        const els = {
+            title: document.getElementById('offer-title'),
+            desc: document.getElementById('offer-desc'),
+            priceOld: document.getElementById('price-old'),
+            priceNew: document.getElementById('price-new'),
+            bgImage: document.getElementById('bg-image'),
+            card: document.getElementById('offer-card'),
+            indicators: document.getElementById('indicators')
+        };
+
+        // Criar Indicadores
+        offers.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.className = `w-3 h-3 rounded-full transition-all duration-300 ${idx === 0 ? 'bg-teal-500 w-8' : 'bg-white/50'}`;
+            dot.id = `dot-${idx}`;
+            els.indicators.appendChild(dot);
+        });
+
+        function updateOffer() {
+            const offer = offers[currentIndex];
+
+            // Animação de Saída
+            els.card.classList.remove('animate__fadeInLeft');
+            els.card.classList.add('animate__fadeOutLeft');
+            els.bgImage.style.opacity = '0';
+
+            setTimeout(() => {
+                // Atualizar Texto
+                els.title.innerText = offer.title;
+                els.desc.innerText = offer.desc;
+                els.priceOld.innerText = `R$ ${offer.oldPrice}`;
+                els.priceNew.innerText = `R$ ${offer.newPrice}`;
+                
+                // Atualizar Imagem com tratamento de erro
+                const tempImg = new Image();
+                tempImg.onload = () => { els.bgImage.src = offer.image; };
+                tempImg.onerror = () => { els.bgImage.src = offer.fallback; }; // Fallback
+                tempImg.src = offer.image;
+
+                // Atualizar Bolinhas
+                document.querySelectorAll('#indicators div').forEach((d, i) => {
+                    d.className = `w-3 h-3 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-teal-500 w-8' : 'bg-white/50'}`;
+                });
+
+                // Animação de Entrada
+                els.bgImage.style.opacity = '1';
+                els.card.classList.remove('animate__fadeOutLeft');
+                els.card.classList.add('animate__fadeInLeft');
+
+                // Avançar Index
+                currentIndex = (currentIndex + 1) % offers.length;
+
+            }, 500); // Tempo para a animação de saída
+        }
+
+        // Iniciar
+        updateOffer();
+        setInterval(updateOffer, SLIDE_INTERVAL);
+
+    </script>
+</body>
+</html>
