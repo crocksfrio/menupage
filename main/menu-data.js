@@ -1,112 +1,137 @@
-// ARQUIVO DE CONFIGURAÇÃO - CROCKS FRIO
-// Edite os textos e preços aqui. Mantenha as aspas e vírgulas.
+/**
+ * CONFIGURAÇÃO DO CARDÁPIO - CROCKS FRIO
+ * Você pode ajustar preços, nomes e o TAMANHO DA FONTE de cada descrição.
+ * Use unidades como '14px', '1rem' ou '0.9rem'.
+ */
 
 const MENU_DATA = {
-    // =========================================
-    // PAGINA 1: SORVETES
-    // =========================================
     sorvetes: {
         titulo: "Sorvetes Artesanais",
         itens: [
-            { 
-                nome: "Mini", 
-                preco: "11,90", 
-                desc: "1 Bola (aprox. 90g). Tamanho perfeito para um desejo rápido.",
-                destaque: false 
+            {
+                nome: "Mini",
+                desc: "1 Bola (Aprox. 90g). O tamanho perfeito para um desejo rápido e delicioso.",
+                preco: "10,90",
+                tamanho_fonte: "0.95rem",
+                destaque: false
             },
-            { 
-                nome: "Clássico", 
-                preco: "18,90", 
-                desc: "2 Bolas (aprox. 180g). A dupla perfeita de sabores.",
-                destaque: true, // Se true, mostra "MAIS PEDIDO"
-                tag: "MAIS PEDIDO"
+            {
+                nome: "Clássico",
+                desc: "2 Bolas (Aprox. 180g). A dupla perfeita para combinar sabores.",
+                preco: "18,90",
+                tamanho_fonte: "1rem",
+                destaque: true,
+                tag: "O MAIS PEDIDO"
             },
-            { 
-                nome: "Master", 
-                preco: "27,90", 
-                desc: "3 Bolas (aprox. 270g). Três bolas de felicidade!",
-                destaque: false 
+            {
+                nome: "Master",
+                desc: "3 Bolas (Aprox. 270g). Três bolas de pura felicidade para sua tarde!",
+                preco: "27,90",
+                tamanho_fonte: "0.95rem",
+                destaque: false
             },
-            { 
-                nome: "Extra Premium", 
-                preco: "35,90", 
-                desc: "4 Bolas (aprox. 360g). Experiência inesquecível.",
-                destaque: false 
+            {
+                nome: "Extra Premium",
+                desc: "4 Bolas (Aprox. 360g). Uma experiência inesquecível de sabor e textura.",
+                preco: "35,90",
+                tamanho_fonte: "0.95rem",
+                destaque: false
             }
         ],
-        // Imagens dos serviços (coloque as fotos na pasta main)
         servicos: [
-            { nome: "Pote", preco: "Incluso", img: "main/servico_pote.jpg", obs: "(padrão)" },
-            { nome: "Pote + Casq.", preco: "+R$ 0,99", img: "main/servico_misto.jpg", obs: "" },
-            { nome: "Cestinha", preco: "+R$ 2,30", img: "main/servico_cestinha.jpg", obs: "" },
-            { nome: "Cascão", preco: "+R$ 1,90", img: "main/servico_cascao.jpg", obs: "" }
+            { nome: "Cascão", preco: "R$ 5,50", img: "main/cascao.jpg" },
+            { nome: "Casquinha", preco: "R$ 3,50", img: "main/casquinha.jpg" },
+            { nome: "Cestinha", preco: "R$ 6,50", img: "main/cestinha.jpg" },
+            { nome: "Cobertura", preco: "R$ 3,00", img: "main/cobertura.jpg" }
         ]
     },
-
-    // =========================================
-    // PAGINA 2: CAFÉS E SALGADOS
-    // =========================================
     cafeteria: {
         titulo: "Cafeteria",
+        extra: "Grãos selecionados e moídos na hora",
         itens: [
-            { nome: "Expresso (30ml)", preco: "8,90", desc: "Grão especial + Shot água com gás" },
-            { nome: "Café Latte (150ml)", preco: "13,90", desc: "Leite cremoso vaporizado com expresso" },
-            { nome: "Cappuccino Cremoso", preco: "16,90", desc: "Leite vaporizado, pó, canela" },
-            { nome: "Affogato", preco: "19,90", desc: "Sorvete Baunilha/Creme + Expresso", icone: "star" }
-        ],
-        extra: "Chás Especiais (Quente/Gelado) - R$ 4,90"
+            {
+                nome: "Expresso",
+                desc: "Curto ou Longo. Intenso e encorpado.",
+                preco: "7,50",
+                tamanho_fonte: "1rem",
+                icone: "coffee"
+            },
+            {
+                nome: "Cappuccino",
+                desc: "Leite vaporizado, café expresso e canela.",
+                preco: "14,90",
+                tamanho_fonte: "0.9rem",
+                icone: "mug-hot"
+            },
+            {
+                nome: "Chocolate Quente",
+                desc: "Cremoso e reconfortante para dias frios.",
+                preco: "13,90",
+                tamanho_fonte: "0.9rem"
+            },
+            {
+                nome: "Mocaccino",
+                desc: "Chocolate, leite vaporizado e expresso.",
+                preco: "17,90",
+                tamanho_fonte: "0.9rem"
+            }
+        ]
     },
     salgados: {
         titulo: "Salgados",
         itens: [
-            { nome: "Mini Croissants (2un)", preco: "5,90" },
-            { nome: "Croissant Simples", preco: "9,90" },
-            { nome: "Croissant Peito Peru/Qj", preco: "16,90" },
-            { nome: "Croissant Carne c/ Req", preco: "21,90" },
+            { nome: "Coxinha de Frango", preco: "8,90" },
+            { nome: "Coxinha c/ Requeijão", preco: "9,90" },
+            { nome: "Pão de Queijo (2 und)", preco: "9,90" },
+            { nome: "Croissant Simples", preco: "9,90" }
         ],
         destaques: [
-            { nome: "Pão de Queijo (2un)", preco: "9,90", icone: "bread-slice" },
-            { nome: "Coxinha c/ Req.", preco: "9,90" }
+            { nome: "Croissant de Frango", preco: "18,90", icone: "bread-slice" },
+            { nome: "Croissant Carne", preco: "21,90", icone: "utensils" }
         ]
     },
-
-    // =========================================
-    // PAGINA 3: DOCES
-    // =========================================
     doces: {
-        titulo: "Doces & Sobremesas",
+        titulo: "Sobremesas & Doces",
         milkshake: {
-            titulo: "Milkshakes",
-            desc: "Escolha até dois sabores de sorvete!",
-            p: { tamanho: "300ml (270g)", preco: "27,90" },
-            g: { tamanho: "500ml (450g)", preco: "39,90" }
+            titulo: "Milkshake Crocks",
+            desc: "Bebida ultra cremosa feita com nosso sorvete artesanal",
+            p: { tamanho: "300ml", preco: "19,90" },
+            g: { tamanho: "500ml", preco: "25,90" }
         },
         petit_gateau: {
-            titulo: "Petit Gateau",
-            desc: "Clássico bolinho quente com sorvete.",
+            titulo: "Petit Gâteau",
+            desc: "Bolinho quente de chocolate com recheio cremoso, servido com uma bola de sorvete à sua escolha.",
             preco: "24,90",
-            img_fundo: "main/petit_bg.jpg" // Nome da imagem de fundo se tiver
+            tamanho_fonte: "1.05rem",
+            img_fundo: "main/petit-gateau-bg.jpg"
         },
         outros: [
-            { 
-                titulo: "Fatias de Torta", 
-                desc: "Limão, Alemã, Cheesecake", 
-                preco: "19,90",
-                cor: "red" 
-            },
-            { 
-                titulo: "Cookies & Brownies", 
+            {
+                titulo: "Cookies & Brownies",
+                desc: "Receita exclusiva Crocks",
+                cor: "teal",
                 itens: [
-                    { nome: "Cookie Belga", preco: "8,90" },
-                    { nome: "Brownie", preco: "8,90" }
+                    { nome: "Cookie Belga", preco: "12,90" },
+                    { nome: "Brownie Tradicional", preco: "13,90" }
                 ],
-                cor: "amber"
+                tamanho_fonte: "0.85rem"
             },
-            { 
-                titulo: "Ring Donuts", 
-                desc: "Chocolate ou Frutas Vermelhas", 
+            {
+                titulo: "Tortas Finas",
+                desc: "Fatias selecionadas",
+                cor: "pink",
                 preco: "16,90",
-                cor: "purple" 
+                tamanho_fonte: "0.9rem"
+            },
+            {
+                titulo: "Chás Especiais",
+                desc: "Quente ou Gelado",
+                cor: "orange",
+                itens: [
+                    { nome: "Hibisco / Verde", preco: "4,90" },
+                    { nome: "Morango / Laranja", preco: "4,90" }
+                ],
+                tamanho_fonte: "0.85rem"
             }
         ]
     }
