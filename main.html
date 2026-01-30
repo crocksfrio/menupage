@@ -3,423 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Forçar modo claro e tentar prevenir inversão de cores -->
+    <meta name="color-scheme" content="light only">
+    <meta name="theme-color" content="#f8f9fa">
     <title>Crocks Frio - Menu Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Importar Dados Externos -->
+    <script src="main/menu-data.js"></script>
+
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8f9fa;
-            overflow: hidden; /* Remove barras de rolagem para TV */
-            cursor: none; /* Esconde o mouse */
+        /* RESET PARA TV - EVITAR MODO NOTURNO */
+        html, body {
+            background-color: #f8f9fa !important;
+            color: #1f2937 !important;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            /* Tenta anular filtros de modo noturno agressivos de algumas TVs */
+            filter: brightness(1) contrast(1) !important;
         }
+
+        :root {
+            color-scheme: light !important;
+        }
+
         .font-display { font-family: 'Fredoka', sans-serif; }
         
-        /* Animações suaves */
-        .fade-enter { opacity: 0; transform: translateY(20px); }
-        .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
-        .fade-exit { opacity: 1; transform: translateY(0); }
-        .fade-exit-active { opacity: 0; transform: translateY(-20px); transition: opacity 0.5s, transform 0.5s; }
+        /* ANIMAÇÃO SIMPLIFICADA (Mais leve para a CPU da TV) */
+        .slide-fade {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* PREÇOS SEM QUEBRA */
         .price-tag {
-            background: linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%);
-            color: white;
+            background: linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%) !important;
+            color: white !important;
             padding: 4px 12px;
             border-radius: 50px;
             font-weight: 800;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            white-space: nowrap !important;
+            display: inline-block;
         }
 
-        /* Container da Mídia */
-        .media-container {
-            position: relative;
-        }
-        
-        .media-container img, .media-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* IMAGENS DE MÍDIA - Sem Ken Burns para não travar */
+        .media-container img {
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
             position: absolute;
-            top: 0;
+            top: 0; 
             left: 0;
-            /* Animação de fade/zoom suave na troca de imagem */
-            animation: kenburns 15s infinite alternate;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+            opacity: 0; 
+            transition: opacity 1s ease-in-out;
+        }
+        .media-container img.active { opacity: 1; }
+
+        /* Estilo para garantir que o fundo do Petit Gateau não suma */
+        .pg-card {
+            background-color: #78350f !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
 
-        .media-container img.active {
-            opacity: 1;
-        }
+        .text-shadow { text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
 
-        @keyframes kenburns {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
+        /* Ajuste de escala para 32" (HD/FHD) */
+        @media (min-width: 1200px) {
+            .container-main { font-size: 1.1rem; }
+            h2 { font-size: 2.5rem !important; }
         }
     </style>
 </head>
-<body class="w-screen h-screen bg-gray-50 flex text-gray-800">
+<body class="flex bg-gray-50 overflow-hidden">
 
-    <!-- LADO ESQUERDO: MÍDIA (Sincronizado com o Menu) -->
+    <!-- LADO ESQUERDO: MÍDIA (40%) -->
     <div class="w-[40%] h-full relative bg-black overflow-hidden shadow-2xl z-10 media-container" id="media-container">
-        <!-- As imagens são injetadas aqui -->
-        <div class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/80 to-transparent z-20"></div>
-        <div class="absolute bottom-10 left-10 z-30 text-white">
-            <h2 class="text-4xl font-display font-bold text-teal-400 mb-2">Crocks Frio</h2>
-            <p class="text-xl opacity-90">Gelados Artesanais & Café</p>
+        <!-- Overlay para garantir leitura do rodapé da imagem -->
+        <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black/90 to-transparent z-20"></div>
+        <div class="absolute bottom-8 left-8 z-30 text-white">
+            <h2 class="text-3xl font-display font-bold text-teal-400 mb-1 text-shadow">Crocks Frio</h2>
+            <p class="text-lg opacity-90 text-shadow">Gelados Artesanais & Café</p>
         </div>
     </div>
 
-    <!-- LADO DIREITO: CARDÁPIO CICLICO -->
-    <div class="w-[60%] h-full flex flex-col relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
+    <!-- LADO DIREITO: CARDÁPIO (60%) -->
+    <div class="w-[60%] h-full flex flex-col relative bg-white">
+        <!-- Padrão de fundo leve -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         
         <!-- Cabeçalho Fixo -->
-        <div class="h-[12vh] flex items-center justify-between px-10 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-ice-cream text-4xl text-teal-500"></i>
-                <h1 class="text-3xl font-display font-bold text-gray-800">Menu - Mais vendidos</h1>
+        <div class="h-[10vh] flex items-center justify-between px-8 border-b border-gray-100 bg-white/95 z-20">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-ice-cream text-3xl text-teal-500"></i>
+                <h1 class="text-2xl font-display font-bold text-gray-800 uppercase tracking-wide">Menu</h1>
             </div>
-            <div class="text-teal-600 font-bold text-xl flex items-center gap-2">
+            <div class="text-teal-600 font-bold text-lg flex items-center gap-2">
                 <i class="fab fa-instagram"></i> @crocksfrio.oficial
             </div>
         </div>
 
-        <!-- Conteúdo Dinâmico (Muda a cada X segundos) -->
-        <div class="flex-1 p-10 relative" id="menu-content">
-            <!-- O Javascript vai preencher isso aqui -->
+        <!-- Conteúdo Dinâmico -->
+        <div class="flex-1 p-8 relative z-10" id="menu-content">
+            <div class="flex items-center justify-center h-full text-gray-400 font-display italic animate-pulse">
+                Iniciando sistema...
+            </div>
         </div>
 
-        <!-- Barra de Progresso do Slide -->
-        <div class="h-2 w-full bg-gray-200 absolute bottom-0 left-0">
+        <!-- Barra de Progresso (Rodapé) -->
+        <div class="h-1.5 w-full bg-gray-100 absolute bottom-0 left-0 z-30">
             <div id="progress-bar" class="h-full bg-teal-500 w-0 transition-all duration-[linear]"></div>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO GERAL
-        const SLIDE_DURATION = 15000; // Tempo total que cada página do menu fica (15 segundos)
-        // O tempo de troca das imagens será calculado automaticamente: SLIDE_DURATION / qtd de imagens
-        
-        // ESTRUTURA DE DADOS UNIFICADA (Conteúdo + Mídia Específica)
+        const SLIDE_DURATION = 15000;
+
+        // Fallback básico para evitar erros fatais
+        const DEFAULT_DATA = {
+            sorvetes: { titulo: "Sorvetes", itens: [], servicos: [] },
+            cafeteria: { titulo: "Cafeteria", itens: [] },
+            salgados: { titulo: "Salgados", itens: [], destaques: [] },
+            doces: { titulo: "Doces", milkshake: {}, petit_gateau: {}, outros: [] }
+        };
+
+        function getSafeData() {
+            return (typeof MENU_DATA !== 'undefined') ? MENU_DATA : DEFAULT_DATA;
+        }
+
         const contentData = [
-            // ============================================
-            // SEÇÃO 1: SORVETES
-            // ============================================
+            // SLIDE 1: SORVETES
             {
                 media: [
-                    { type: 'image', src: 'main/icecream_scoop.jpg', fallback: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80' },
-                    { type: 'image', src: 'main/icecream_cone.jpg', fallback: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=800&q=80' }
+                    { src: 'main/icecream_1.jpg', fb: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb' },
+                    { src: 'main/icecream_2.jpg', fb: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a' }
                 ],
-                html: `
-                <div class="h-full flex flex-col justify-center fade-enter-active">
-                    <h2 class="text-4xl font-display font-bold text-teal-600 mb-8 border-l-8 border-teal-500 pl-4">Sorvetes Artesanais</h2>
-                    
-                    <div class="grid grid-cols-2 gap-8 mb-10">
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border-l-4 border-yellow-400">
-                            <div class="flex justify-between items-end mb-2">
-                                <h3 class="text-2xl font-bold">Mini</h3>
-                                <span class="price-tag text-2xl">R$ 11,90</span>
-                            </div>
-                            <p class="text-gray-500">1 Bola (aprox. 90g). Tamanho perfeito para um desejo rápido.</p>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border-l-4 border-red-400 transform scale-105 ring-4 ring-teal-50">
-                            <div class="flex justify-between items-end mb-2">
-                                <h3 class="text-2xl font-bold text-teal-700">Clássico <span class="text-xs bg-yellow-300 text-yellow-800 px-2 py-1 rounded ml-2">MAIS PEDIDO</span></h3>
-                                <span class="price-tag text-2xl">R$ 18,90</span>
-                            </div>
-                            <p class="text-gray-500">2 Bolas (aprox. 180g). A dupla perfeita de sabores.</p>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border-l-4 border-purple-400">
-                            <div class="flex justify-between items-end mb-2">
-                                <h3 class="text-2xl font-bold">Master</h3>
-                                <span class="price-tag text-2xl">R$ 27,90</span>
-                            </div>
-                            <p class="text-gray-500">3 Bolas (aprox. 270g). Três bolas de felicidade!</p>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border-l-4 border-blue-400">
-                            <div class="flex justify-between items-end mb-2">
-                                <h3 class="text-2xl font-bold">Extra Premium</h3>
-                                <span class="price-tag text-2xl">R$ 35,90</span>
-                            </div>
-                            <p class="text-gray-500">4 Bolas (aprox. 360g). Experiência inesquecível.</p>
-                        </div>
-                    </div>
-
-                    <h3 class="text-2xl font-display font-bold text-gray-700 mb-4 pl-4">Como quer ser servido?</h3>
-                    <div class="grid grid-cols-4 gap-4 text-center">
-                        <div class="bg-teal-50 p-4 rounded-xl border border-teal-100">
-                            <i class="fas fa-bowl-food text-3xl text-teal-500 mb-2"></i>
-                            <p class="font-bold">Pote</p>
-                            <p class="text-xs text-gray-500">Incluso (padrão)</p>
-                        </div>
-                        <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
-                            <i class="fas fa-ice-cream text-3xl text-orange-500 mb-2"></i>
-                            <p class="font-bold">Pote + Casq.</p>
-                            <p class="text-lg font-bold text-orange-600">+R$ 0,99</p>
-                        </div>
-                        <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-                            <i class="fas fa-basket-shopping text-3xl text-yellow-500 mb-2"></i>
-                            <p class="font-bold">Cestinha</p>
-                            <p class="text-lg font-bold text-yellow-600">+R$ 2,30</p>
-                        </div>
-                        <div class="bg-red-50 p-4 rounded-xl border border-red-100">
-                            <i class="fas fa-cookie-bite text-3xl text-red-500 mb-2"></i>
-                            <p class="font-bold">Cascão</p>
-                            <p class="text-lg font-bold text-red-600">+R$ 1,90</p>
-                        </div>
-                    </div>
-                </div>
-                `
-            },
-
-            // ============================================
-            // SEÇÃO 2: CAFÉS & SALGADOS
-            // ============================================
-            {
-                media: [
-                    { type: 'image', src: 'main/coffee_art.jpg', fallback: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80' },
-                    { type: 'image', src: 'main/croissants.jpg', fallback: 'https://images.unsplash.com/photo-1555507036-ab1f40388085?auto=format&fit=crop&w=800&q=80' }
-                ],
-                html: `
-                <div class="h-full flex flex-col fade-enter-active">
-                    <div class="grid grid-cols-2 gap-10 h-full">
+                getHtml: () => {
+                    const d = getSafeData().sorvetes;
+                    const items = d.itens.map((item, idx) => {
+                        const colors = ['teal', 'orange', 'purple', 'pink'];
+                        const color = colors[idx % colors.length];
+                        const highlight = item.destaque ? `ring-2 ring-yellow-400 scale-[1.02] bg-yellow-50/30` : `bg-white`;
+                        const tag = item.destaque ? `<span class="bg-yellow-400 text-yellow-900 text-[10px] px-2 py-0.5 rounded-full font-black ml-2 uppercase whitespace-nowrap">O mais pedido</span>` : '';
                         
-                        <!-- Coluna Cafés -->
-                        <div>
-                            <h2 class="text-4xl font-display font-bold text-amber-800 mb-6 border-l-8 border-amber-600 pl-4">Cafeteria</h2>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
-                                    <div>
-                                        <h4 class="text-xl font-bold">Expresso (30ml)</h4>
-                                        <span class="text-sm text-gray-500">Grão especial + Shot água com gás</span>
-                                    </div>
-                                    <span class="text-xl font-bold text-amber-700">R$ 8,90</span>
-                                </div>
-                                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
-                                    <div>
-                                        <h4 class="text-xl font-bold">Café Latte (150ml)</h4>
-                                        <span class="text-sm text-gray-500">Leite cremoso vaporizado com expresso</span>
-                                    </div>
-                                    <span class="text-xl font-bold text-amber-700">R$ 13,90</span>
-                                </div>
-                                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border-l-4 border-amber-400">
-                                    <div>
-                                        <h4 class="text-xl font-bold">Cappuccino Cremoso</h4>
-                                        <span class="text-sm text-gray-500">Leite vaporizado, pó, canela</span>
-                                    </div>
-                                    <span class="text-xl font-bold text-amber-700">R$ 16,90</span>
-                                </div>
-                                <div class="flex justify-between items-center bg-amber-50 p-4 rounded-xl shadow-sm border border-amber-200">
-                                    <div>
-                                        <h4 class="text-xl font-bold text-amber-900"><i class="fas fa-star mr-2"></i>Affogato</h4>
-                                        <span class="text-sm text-gray-600">Sorvete Baunilha/Creme + Expresso</span>
-                                    </div>
-                                    <span class="text-2xl font-bold text-amber-800">R$ 19,90</span>
-                                </div>
-                                <div class="bg-green-50 p-3 rounded-lg mt-4 text-green-800 text-center font-bold">
-                                    Chás Especiais (Quente/Gelado) - R$ 4,90
-                                </div>
+                        return `
+                        <div class="${highlight} p-4 rounded-xl shadow-sm border-l-4 border-${color}-500 flex flex-col justify-between h-28">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-black text-gray-800 leading-none uppercase">${item.nome}${tag}</h3>
                             </div>
-                        </div>
+                            <p class="text-gray-500 text-xs line-clamp-2">${item.desc}</p>
+                            <div class="flex justify-end">
+                                <span class="price-tag">R$ ${item.preco}</span>
+                            </div>
+                        </div>`;
+                    }).join('');
 
-                        <!-- Coluna Salgados -->
-                        <div>
-                            <h2 class="text-4xl font-display font-bold text-orange-600 mb-6 border-l-8 border-orange-500 pl-4">Salgados</h2>
-                            <div class="space-y-3">
-                                <div class="menu-item border-b border-dashed border-gray-300 pb-2">
-                                    <div class="flex justify-between text-xl font-bold"><span>Mini Croissants (2un)</span> <span>R$ 5,90</span></div>
-                                </div>
-                                <div class="menu-item border-b border-dashed border-gray-300 pb-2">
-                                    <div class="flex justify-between text-xl font-bold"><span>Croissant Simples</span> <span>R$ 9,90</span></div>
-                                </div>
-                                <div class="menu-item border-b border-dashed border-gray-300 pb-2">
-                                    <div class="flex justify-between text-xl font-bold"><span>Croissant Peito Peru/Qj</span> <span>R$ 16,90</span></div>
-                                </div>
-                                <div class="menu-item border-b border-dashed border-gray-300 pb-2">
-                                    <div class="flex justify-between text-xl font-bold"><span>Croissant Carne c/ Req</span> <span>R$ 21,90</span></div>
-                                </div>
-                                <div class="bg-orange-100 p-4 rounded-xl mt-4 flex justify-between items-center">
-                                    <span class="font-bold text-orange-900"><i class="fas fa-bread-slice mr-2"></i>Pão de Queijo (2un)</span>
-                                    <span class="font-bold text-2xl text-orange-700">R$ 9,90</span>
-                                </div>
-                                <div class="bg-orange-50 p-4 rounded-xl mt-2 flex justify-between items-center">
-                                    <span class="font-bold text-orange-900">Coxinha c/ Req.</span>
-                                    <span class="font-bold text-xl text-orange-700">R$ 9,90</span>
-                                </div>
+                    const services = d.servicos.map(s => `
+                        <div class="flex flex-col items-center">
+                            <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-teal-100 mb-1">
+                                <img src="${s.img}" onerror="this.src='https://placehold.co/100x100?text=Foto'" class="w-full h-full object-cover">
                             </div>
+                            <span class="text-[10px] font-bold uppercase text-gray-600">${s.nome}</span>
+                            <span class="text-xs font-black text-teal-600">${s.preco}</span>
                         </div>
-                    </div>
-                </div>
-                `
+                    `).join('');
+
+                    return `
+                    <div class="slide-fade h-full flex flex-col justify-between">
+                        <div>
+                            <h2 class="font-display font-bold text-teal-600 mb-6 border-l-8 border-teal-500 pl-4 uppercase tracking-tighter">${d.titulo}</h2>
+                            <div class="grid grid-cols-2 gap-4">${items}</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 text-center tracking-widest">Como quer ser servido?</h3>
+                            <div class="grid grid-cols-4 gap-2">${services}</div>
+                        </div>
+                    </div>`;
+                }
             },
-
-            // ============================================
-            // SEÇÃO 3: DOCES & SOBREMESAS
-            // ============================================
+            // SLIDE 2: CAFÉ & SALGADOS
             {
                 media: [
-                    { type: 'image', src: 'main/milkshake.jpg', fallback: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=80' },
-                    { type: 'image', src: 'main/brownie_plate.jpg', fallback: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476d?auto=format&fit=crop&w=800&q=80' }
+                    { src: 'main/coffee.jpg', fb: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf' },
+                    { src: 'main/salgado.jpg', fb: 'https://images.unsplash.com/photo-1555507036-ab1f40388085' }
                 ],
-                html: `
-                <div class="h-full flex flex-col justify-center fade-enter-active">
-                    <h2 class="text-4xl font-display font-bold text-pink-600 mb-6 border-l-8 border-pink-500 pl-4">Doces & Sobremesas</h2>
+                getHtml: () => {
+                    const data = getSafeData();
+                    const cafe = data.cafeteria;
+                    const salg = data.salgados;
+
+                    const cafeItems = cafe.itens.map(i => `
+                        <div class="flex justify-between items-center bg-white p-2.5 rounded-lg border-b border-gray-100">
+                            <div class="leading-tight">
+                                <span class="font-bold text-gray-800">${i.nome}</span>
+                                <p class="text-[10px] text-gray-400">${i.desc || ''}</p>
+                            </div>
+                            <span class="font-black text-amber-700 ml-2 whitespace-nowrap">R$ ${i.preco}</span>
+                        </div>
+                    `).join('');
+
+                    const salgItems = salg.itens.map(i => `
+                        <div class="flex justify-between items-center py-1.5 border-b border-dashed border-gray-200">
+                            <span class="font-bold text-sm text-gray-700">${i.nome}</span>
+                            <span class="font-black text-gray-900 whitespace-nowrap ml-2">R$ ${i.preco}</span>
+                        </div>
+                    `).join('');
+
+                    return `
+                    <div class="slide-fade grid grid-cols-2 gap-8 h-full">
+                        <div class="flex flex-col">
+                            <h2 class="font-display font-bold text-amber-800 mb-4 border-l-8 border-amber-600 pl-4 uppercase tracking-tighter">${cafe.titulo}</h2>
+                            <div class="space-y-1">${cafeItems}</div>
+                            <div class="mt-auto bg-green-50 p-2 rounded text-green-700 text-[10px] font-bold text-center border border-green-100">
+                                <i class="fas fa-leaf mr-1"></i> ${cafe.extra}
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="font-display font-bold text-orange-600 mb-4 border-l-8 border-orange-500 pl-4 uppercase tracking-tighter">${salg.titulo}</h2>
+                            <div class="bg-gray-50/50 p-3 rounded-xl mb-4">${salgItems}</div>
+                            <div class="space-y-2">
+                                ${salg.destaques.map(d => `
+                                    <div class="bg-orange-600 text-white p-3 rounded-xl flex justify-between items-center shadow-md">
+                                        <span class="font-black text-sm uppercase">${d.nome}</span>
+                                        <span class="font-black text-lg">R$ ${d.preco}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            },
+            // SLIDE 3: DOCES
+            {
+                media: [
+                    { src: 'main/dessert_1.jpg', fb: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699' },
+                    { src: 'main/dessert_2.jpg', fb: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476d' }
+                ],
+                getHtml: () => {
+                    const doces = getSafeData().doces;
+                    const ms = doces.milkshake;
+                    const pg = doces.petit_gateau;
                     
-                    <div class="grid grid-cols-12 gap-6 mb-8">
-                        <!-- Milkshakes -->
-                        <div class="col-span-5 bg-pink-50 p-6 rounded-2xl border border-pink-200">
-                            <h3 class="text-2xl font-bold text-pink-800 mb-4"><i class="fas fa-blender mr-2"></i>Milkshakes</h3>
-                            <p class="text-sm text-gray-600 mb-4">Escolha até dois sabores de sorvete!</p>
-                            <div class="flex justify-between items-center border-b border-pink-200 pb-2 mb-2">
-                                <span class="font-bold">300ml (270g)</span>
-                                <span class="text-xl font-bold text-pink-600">R$ 27,90</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold">500ml (450g)</span>
-                                <span class="text-xl font-bold text-pink-600">R$ 39,90</span>
-                            </div>
-                        </div>
+                    const pgBg = pg.img_fundo ? `background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${pg.img_fundo}') !important;` : '';
 
-                        <!-- Petit Gateau -->
-                        <div class="col-span-7 bg-amber-900 text-white p-6 rounded-2xl relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full transform translate-x-10 -translate-y-10"></div>
-                            <h3 class="text-3xl font-display font-bold mb-2">Petit Gateau</h3>
-                            <p class="text-amber-200 mb-4">Clássico bolinho quente com sorvete.</p>
-                            <div class="text-right">
-                                <span class="text-5xl font-bold text-yellow-400">R$ 24,90</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-6">
-                        <div class="bg-white p-4 rounded-xl shadow-md border-t-4 border-red-400">
-                            <h4 class="font-bold text-lg text-gray-700">Fatias de Torta</h4>
-                            <p class="text-xs text-gray-500 mb-2">Limão, Alemã, Cheesecake</p>
-                            <div class="text-right text-2xl font-bold text-teal-600">R$ 19,90</div>
-                        </div>
+                    return `
+                    <div class="slide-fade h-full flex flex-col">
+                        <h2 class="font-display font-bold text-pink-600 mb-6 border-l-8 border-pink-500 pl-4 uppercase tracking-tighter">${doces.titulo}</h2>
                         
-                        <div class="bg-white p-4 rounded-xl shadow-md border-t-4 border-amber-800">
-                            <h4 class="font-bold text-lg text-gray-700">Cookies & Brownies</h4>
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>Cookie Belga</span> <span class="font-bold">R$ 8,90</span>
+                        <div class="grid grid-cols-12 gap-4 mb-4">
+                            <div class="col-span-5 bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                                <h3 class="text-xl font-black text-pink-800 mb-1 uppercase tracking-tight">${ms.titulo}</h3>
+                                <p class="text-[10px] text-pink-400 mb-4 uppercase font-bold">${ms.desc}</p>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center bg-white p-2 rounded-lg shadow-sm">
+                                        <span class="text-xs font-bold text-gray-500 uppercase">${ms.p.tamanho}</span>
+                                        <span class="font-black text-pink-600">R$ ${ms.p.preco}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center bg-white p-2 rounded-lg shadow-sm">
+                                        <span class="text-xs font-bold text-gray-500 uppercase">${ms.g.tamanho}</span>
+                                        <span class="font-black text-pink-600">R$ ${ms.g.preco}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex justify-between text-sm">
-                                <span>Brownie</span> <span class="font-bold">R$ 8,90</span>
+                            <div class="col-span-7 pg-card rounded-2xl p-6 text-white flex flex-col justify-center relative overflow-hidden shadow-lg border-2 border-amber-900" style="${pgBg}">
+                                <h3 class="text-3xl font-display font-bold text-shadow uppercase mb-1">${pg.titulo}</h3>
+                                <p class="text-amber-200 text-xs text-shadow uppercase mb-4">${pg.desc}</p>
+                                <div class="text-right">
+                                    <span class="text-4xl font-black text-yellow-400 text-shadow">R$ ${pg.preco}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="bg-white p-4 rounded-xl shadow-md border-t-4 border-purple-500">
-                            <h4 class="font-bold text-lg text-gray-700">Ring Donuts</h4>
-                            <p class="text-xs text-gray-500 mb-2">Chocolate ou Frutas Vermelhas</p>
-                            <div class="text-right text-2xl font-bold text-teal-600">R$ 16,90</div>
+                        <div class="grid grid-cols-3 gap-3">
+                            ${doces.outros.map(g => `
+                                <div class="bg-white p-3 rounded-xl shadow-sm border-t-4 border-${g.cor}-400">
+                                    <h4 class="font-black text-xs text-gray-700 uppercase mb-1">${g.titulo}</h4>
+                                    ${g.itens ? g.itens.map(i => `<div class="flex justify-between text-[10px] mb-0.5"><span>${i.nome}</span><span class="font-bold">R$ ${i.preco}</span></div>`).join('') : `<div class="text-right font-black text-lg text-${g.cor}-600">R$ ${g.preco}</div>`}
+                                </div>
+                            `).join('')}
                         </div>
-                    </div>
-                    
-                    <div class="mt-8 text-center text-gray-400 text-sm">
-                        <i class="fas fa-info-circle mr-1"></i> Taxa de R$ 2,00 para embalagens de viagem.
-                    </div>
-                </div>
-                `
+                    </div>`;
+                }
             }
         ];
 
-        // VARIÁVEIS DE ESTADO
-        let currentSlideIndex = 0;
-        let mediaInterval = null; // Guardará o intervalo de troca de fotos interno
+        let slideIdx = 0;
+        let mediaRotation = null;
+        const mediaBox = document.getElementById('media-container');
+        const menuBox = document.getElementById('menu-content');
+        const pBar = document.getElementById('progress-bar');
 
-        // ELEMENTOS DO DOM
-        const mediaContainer = document.getElementById('media-container');
-        const menuContent = document.getElementById('menu-content');
-        const progressBar = document.getElementById('progress-bar');
+        function rotateMedia(list) {
+            if (mediaRotation) clearInterval(mediaRotation);
+            if (!list || list.length === 0) return;
 
-        // FUNÇÃO PARA ATUALIZAR AS MÍDIAS DA SEÇÃO ATUAL
-        function startMediaRotation(mediaList) {
-            // Limpa intervalo anterior de mídia, se houver
-            if (mediaInterval) clearInterval(mediaInterval);
+            const timePerImg = SLIDE_DURATION / list.length;
+            let imgIdx = 0;
 
-            // Se não houver mídia para esta seção, retorna
-            if (!mediaList || mediaList.length === 0) return;
-
-            // Calcula o tempo de cada imagem para caber exatamente no tempo do slide
-            const timePerImage = SLIDE_DURATION / mediaList.length;
-            let currentMediaIndex = 0;
-
-            // Função interna para trocar a imagem
-            const showImage = () => {
-                const media = mediaList[currentMediaIndex];
+            const nextImg = () => {
+                const item = list[imgIdx];
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.onerror = () => { img.src = item.fb; };
                 
-                // Cria elemento novo
-                const el = document.createElement('img');
-                el.src = media.src;
-                el.onerror = () => { el.src = media.fallback; };
-                el.className = "active"; // Começa visível (fade é via CSS transition se ajustado, aqui usaremos replace simples ou append)
-                
-                // Adiciona e remove o anterior após carregar para evitar "piscar"
-                // Limpa container (mantendo o gradiente e logo)
-                // Uma estratégia segura: adicionar por cima e remover o velho
-                
-                // Reset básico do container, preservando overlays
-                const overlays = mediaContainer.innerHTML.match(/<div class="absolute.*?<\/div>/g).join('');
-                mediaContainer.innerHTML = overlays;
-                mediaContainer.prepend(el);
+                // Limpeza agressiva para economizar RAM da TV
+                const currentImgs = mediaBox.querySelectorAll('img');
+                currentImgs.forEach(i => {
+                    if (!i.classList.contains('active')) i.remove();
+                });
 
-                // Avança índice
-                currentMediaIndex = (currentMediaIndex + 1) % mediaList.length;
+                mediaBox.prepend(img);
+                
+                // Timeout curto para permitir renderização antes do fade
+                setTimeout(() => {
+                    img.classList.add('active');
+                    if (currentImgs[0]) currentImgs[0].style.opacity = '0';
+                }, 100);
+
+                imgIdx = (imgIdx + 1) % list.length;
             };
 
-            // Mostra a primeira imediatamente
-            showImage();
-
-            // Se tiver mais de uma imagem, agenda as próximas
-            if (mediaList.length > 1) {
-                mediaInterval = setInterval(showImage, timePerImage);
-            }
+            nextImg();
+            if (list.length > 1) mediaRotation = setInterval(nextImg, timePerImg);
         }
 
-        // FUNÇÃO PRINCIPAL: TROCA O SLIDE DO MENU E MÍDIA
-        function updateSlide() {
-            const slideData = contentData[currentSlideIndex];
+        function runSlide() {
+            const data = contentData[slideIdx];
+            menuBox.innerHTML = data.getHtml();
 
-            // 1. Atualiza Menu (Lado Direito)
-            // Fade Out anterior
-            if(menuContent.children.length > 0) {
-                menuContent.firstElementChild.classList.remove('fade-enter-active');
-                menuContent.firstElementChild.classList.add('fade-exit-active');
-            }
-
-            // Aguarda fade out e insere novo
+            pBar.style.transition = 'none';
+            pBar.style.width = '0%';
+            
             setTimeout(() => {
-                menuContent.innerHTML = slideData.html;
-                
-                // Reseta e anima barra de progresso
-                progressBar.style.transition = 'none';
-                progressBar.style.width = '0%';
-                
-                setTimeout(() => {
-                    progressBar.style.transition = `width ${SLIDE_DURATION}ms linear`;
-                    progressBar.style.width = '100%';
-                }, 50);
+                pBar.style.transition = `width ${SLIDE_DURATION}ms linear`;
+                pBar.style.width = '100%';
+            }, 100);
 
-            }, 500);
-
-            // 2. Atualiza Mídia (Lado Esquerdo) - Sincronizado!
-            startMediaRotation(slideData.media);
-
-            // Prepara próximo índice
-            currentSlideIndex = (currentSlideIndex + 1) % contentData.length;
+            rotateMedia(data.media);
+            slideIdx = (slideIdx + 1) % contentData.length;
         }
 
-        // INICIALIZAÇÃO
-        updateSlide();
-        
-        // LOOP PRINCIPAL
-        setInterval(updateSlide, SLIDE_DURATION);
-
+        window.onload = () => {
+            setTimeout(runSlide, 1000); // Aguarda carregar scripts externos
+            setInterval(runSlide, SLIDE_DURATION);
+        };
     </script>
 </body>
 </html>
