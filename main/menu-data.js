@@ -113,7 +113,7 @@ const MENU_DATA = {
             { nome: "Frango c/ Requeijão", preco: "18,90" },
             //{ nome: "Croissant Carne c/ Requeijão", preco: "21,90" },
             { nome: "Peito Peru c/ Queijo do Reino", preco: "22,90" },
-            { nome: "Queijo do Reino", preco: "23,90" }
+            //{ nome: "Queijo do Reino", preco: "23,90" }
         ]
     },
     doces: {
