@@ -34,7 +34,7 @@ const MENU_DATA = {
             {
                 nome: "Mini",
                 desc: "1 Bola (90g). Desejo rápido e delicioso.",
-                preco: "10,90",
+                preco: "11,90",
                 tamanho_fonte: "0.95rem",
                 destaque: false
             },
@@ -85,15 +85,27 @@ const MENU_DATA = {
                 tamanho_fonte: "0.9rem"
             },
             {
+                nome: "Café Filtrado",
+                desc: "Tradicional, suave e saboroso.",
+                preco: "8,90",
+                tamanho_fonte: "0.9rem"
+            },
+            {
+                nome: "Café Latte",
+                desc: "Leite cremoso vaporizado com expresso.",
+                preco: "13,90",
+                tamanho_fonte: "0.9rem"
+            },
+            {
                 nome: "Cappuccino Cremoso",
                 desc: "Leite vaporizado, pó de preparo e canela.",
                 preco: "16,90",
                 tamanho_fonte: "0.9rem"
             },
             {
-                nome: "Mocaccino",
-                desc: "Chocolate, leite vaporizado e expresso.",
-                preco: "17,90",
+                nome: "Chás (Gelado ou Quente)",
+                desc: "Hibisco, Camomila com Maracujá, Verde, Morango com Laranja, Abacaxi com Hortelã.",
+                preco: "4,90",
                 tamanho_fonte: "0.9rem"
             }
         ]
@@ -108,7 +120,7 @@ const MENU_DATA = {
             { nome: "Pão de Queijo (2 und)", preco: "R$ 9,90" }
         ],
         destaques: [
-            { nome: "Croissants Simples", preco: "R$ 9,90" },
+            { nome: "Croissants Simples", preco: "9,90" },
             { nome: "Peito Peru c/ Queijo", preco: "16,90" },
             { nome: "Frango c/ Requeijão", preco: "18,90" },
             //{ nome: "Croissant Carne c/ Requeijão", preco: "21,90" },
@@ -121,9 +133,9 @@ const MENU_DATA = {
         destaques_extra: {
             titulo: "Outras Bebidas",
             itens: [
-                { nome: "Água S/ Gás", preco: "4,90" },
-                    { nome: "Água C/ Gás", preco: "5,90" },
-                    { nome: "Refrigerantes", preco: "6,90" }
+                { nome: "Água S/ Gás", preco: "4,90", desc: "" },
+                { nome: "Água C/ Gás", preco: "5,90", desc: "" },
+                { nome: "Refrigerantes", preco: "6,90", desc: "" }
             ]
         },
         milkshake: {
