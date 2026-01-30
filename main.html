@@ -91,8 +91,8 @@
     </div>
 
     <script>
-        const SLIDE_DURATION = 3000;
-        const DEFAULT_DATA = { sorvetes: { titulo: "Sorvetes", itens: [], servicos: [] }, cafeteria: { titulo: "Café", itens: [] }, salgados: { titulo: "Salgados", itens: [], destaques: [] }, doces: { titulo: "Doces", milkshake: {}, petit_gateau: {}, outros: [] } };
+        const SLIDE_DURATION = 5000;
+        const DEFAULT_DATA = { combos: { itens: [] }, sorvetes: { titulo: "Sorvetes", itens: [], servicos: [] }, cafeteria: { titulo: "Café", itens: [] }, salgados: { titulo: "Salgados", itens: [], destaques: [] }, doces: { titulo: "Doces", milkshake: {}, petit_gateau: {}, outros: [] } };
         function getSafeData() { return (typeof MENU_DATA !== 'undefined') ? MENU_DATA : DEFAULT_DATA; }
 
         const contentData = [
@@ -113,7 +113,7 @@
 
                     const services = d.servicos.map(s => `
                         <div class="flex flex-col items-center">
-                            <div class="w-15 h-15 rounded-full overflow-hidden border border-teal-100 mb-1">
+                            <div class="w-[170px] h-[170px] rounded-full overflow-hidden border border-teal-100 mb-1">
                                 <img src="${s.img}" onerror="this.src='https://placehold.co/100x100?text=S'" class="w-full h-full object-cover">
                             </div>
                             <span class="text-[15px] font-bold uppercase text-gray-500">${s.nome}</span>
@@ -125,7 +125,7 @@
                         <div><h2 class="font-display font-bold text-teal-600 border-l-8 border-teal-500 pl-4 uppercase">${d.titulo}</h2>
                         <div class="grid grid-cols-2 gap-4">${items}</div></div>
                         <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 mt-4">
-                            <h3 class="text-[10px] font-bold text-gray-400 uppercase mb-2 text-center tracking-widest">Opções de Serviço</h3>
+                            <h3 class="text-[13px] font-bold text-gray-900 uppercase mb-2 text-center tracking-widest">Como quer ser servido?</h3>
                             <div class="grid grid-cols-4 gap-2">${services}</div>
                         </div>
                     </div>`;
@@ -141,16 +141,16 @@
                         <div class="leading-tight"><span class="font-bold text-gray-800 text-lg">${i.nome}</span><p class="text-[11px] text-gray-400" style="font-size:${i.tamanho_fonte}">${i.desc}</p></div>
                         <span class="text-xl font-black text-amber-700 ml-3 flex-shrink-0 text-right">R$ ${i.preco}</span>
                     </div>`).join('');
-                    const salgItems = salg.itens.slice(0, 5).map(i => `<div class="flex justify-between items-center py-1.5 border-b border-dashed border-gray-200">
-                        <span class="font-bold text-sm text-gray-700 truncate">${i.nome}</span><span class="font-black text-lg text-gray-900 ml-2">R$ ${i.preco}</span>
+                    const salgItems = salg.itens.slice(0, 6).map(i => `<div class="flex justify-between items-center py-1.5 border-b border-dashed border-gray-200">
+                        <span class="font-bold text-sm text-gray-700 truncate">${i.nome}</span><span class="font-black text-lg text-gray-900 ml-2">${i.preco}</span>
                     </div>`).join('');
 
                     return `<div class="slide-fade grid grid-cols-2 gap-8 h-full">
                         <div class="flex flex-col"><h2 class="font-display font-bold text-amber-800 border-l-8 border-amber-600 pl-4 uppercase">${cafe.titulo}</h2>
-                        <div class="space-y-2">${cafeItems}</div><div class="mt-auto bg-green-50 p-2 rounded text-green-700 text-[10px] font-bold text-center border border-green-100">${cafe.extra}</div></div>
+                        <div class="space-y-2">${cafeItems}</div><div class="bg-green-50 p-2 rounded text-green-700 text-[15px] font-bold text-center border border-green-100 flex items-center justify-center gap-2"><i class="fas fa-seedling"></i> ${cafe.extra}</div></div>
                         <div class="flex flex-col"><h2 class="font-display font-bold text-orange-600 border-l-8 border-orange-500 pl-4 uppercase">${salg.titulo}</h2>
                         <div class="bg-gray-50/50 p-3 rounded-xl mb-4">${salgItems}</div>
-                        <div class="space-y-2">${salg.destaques.slice(0,2).map(d => `<div class="bg-orange-600 text-white p-3 rounded-xl flex justify-between items-center shadow-md">
+                        <div class="space-y-2">${salg.destaques.slice(0,6).map(d => `<div class="bg-orange-600 text-white p-3 rounded-xl flex justify-between items-center shadow-md">
                             <span class="font-black text-[11px] uppercase truncate mr-2">${d.nome}</span><span class="font-black text-lg">R$ ${d.preco}</span>
                         </div>`).join('')}</div></div>
                     </div>`;
@@ -159,24 +159,41 @@
             {
                 media: [{ src: 'main/doces.jpg', fb: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699' }],
                 getHtml: () => {
-                    const doces = getSafeData().doces;
+                    const data = getSafeData();
+                    const doces = data.doces;
                     const ms = doces.milkshake;
                     const pg = doces.petit_gateau;
+                    const extra = doces.destaques_extra;
+                    
                     return `<div class="slide-fade h-full flex flex-col">
                         <h2 class="font-display font-bold text-pink-600 border-l-8 border-pink-500 pl-4 uppercase">${doces.titulo}</h2>
                         <div class="grid grid-cols-12 gap-4 mb-4">
-                            <div class="col-span-5 bg-pink-50 p-4 rounded-2xl border border-pink-100">
-                                <h3 class="text-lg font-black text-pink-800 mb-1 uppercase">${ms.titulo}</h3>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between bg-white p-2 rounded shadow-sm text-xs font-bold"><span>${ms.p.tamanho}</span><span class="text-pink-600">R$ ${ms.p.preco}</span></div>
-                                    <div class="flex justify-between bg-white p-2 rounded shadow-sm text-xs font-bold"><span>${ms.g.tamanho}</span><span class="text-pink-600">R$ ${ms.g.preco}</span></div>
+                            <div class="col-span-5 flex flex-col gap-3">
+                                <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                                    <h3 class="text-lg font-black text-pink-800 mb-1 uppercase">${ms.titulo}</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between bg-white p-2 rounded shadow-sm text-xs font-bold"><span>${ms.p.tamanho}</span><span class="text-pink-600">R$ ${ms.p.preco}</span></div>
+                                        <div class="flex justify-between bg-white p-2 rounded shadow-sm text-xs font-bold"><span>${ms.g.tamanho}</span><span class="text-pink-600">R$ ${ms.g.preco}</span></div>
+                                    </div>
+                                </div>
+                                <div class="bg-teal-50 p-3 rounded-2xl border border-teal-100 flex-1">
+                                    <h3 class="text-[10px] font-black text-teal-800 mb-2 uppercase tracking-widest">${extra.titulo}</h3>
+                                    ${extra.itens.map(c => `
+                                        <div class="mb-2 last:mb-0">
+                                            <div class="flex justify-between items-baseline">
+                                                <span class="text-[10px] font-bold text-gray-700 uppercase">${c.nome}</span>
+                                                <span class="text-xs font-black text-teal-600">R$ ${c.preco}</span>
+                                            </div>
+                                            <p class="text-[8px] text-gray-400 leading-none">${c.desc}</p>
+                                        </div>
+                                    `).join('')}
                                 </div>
                             </div>
-                            <div class="col-span-7 bg-amber-900 rounded-2xl p-4 text-white flex flex-col justify-between relative shadow-lg min-h-[350px]" style="background-image: url('${pg.img_fundo}'); background-size:cover;" background-position: center;">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold text-shadow uppercase">${pg.titulo}</h3>
-                                <p class="text-[10px] text-amber-200 uppercase mb-2" style="font-size:${pg.tamanho_fonte}">${pg.desc}</p>
-                            </div>
+                            <div class="col-span-7 bg-amber-900 rounded-2xl p-4 text-white flex flex-col justify-between relative shadow-lg min-h-[350px]" style="background-image: url('${pg.img_fundo}'); background-size:cover; background-position: center;">
+                                <div>
+                                    <h3 class="text-2xl font-display font-bold text-shadow uppercase">${pg.titulo}</h3>
+                                    <p class="text-[10px] text-amber-100 uppercase mb-2 font-bold" style="font-size:${pg.tamanho_fonte}">${pg.desc}</p>
+                                </div>
                                 <div class="text-right"><span class="text-3xl font-black text-yellow-400 text-shadow">R$ ${pg.preco}</span></div>
                             </div>
                         </div>

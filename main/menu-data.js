@@ -12,15 +12,19 @@ const MENU_DATA = {
                 nome: "Alegria a Dois",
                 desc: "2x Clássico + 1 Fatia de Torta",
                 preco_de: "57,70",
-                preco: "49,90",
-                tamanho_fonte: "1rem"
+                preco: "49,90"
             },
             {
                 nome: "Clássico Crocks",
                 desc: "1x Clássico + Cookie ou Brownie",
                 preco_de: "27,80",
-                preco: "25,90",
-                tamanho_fonte: "1rem"
+                preco: "25,90"
+            },
+            {
+                nome: "Frio & Expresso",
+                desc: "1x Café + 1x Clássico",
+                preco_de: "27,80",
+                preco: "24,90"
             }
         ]
     },
@@ -30,15 +34,15 @@ const MENU_DATA = {
             {
                 nome: "Mini",
                 desc: "1 Bola (90g). Desejo rápido e delicioso.",
-                preco: "11,90",
-                tamanho_fonte: "1.1rem",
+                preco: "10,90",
+                tamanho_fonte: "0.95rem",
                 destaque: false
             },
             {
                 nome: "Clássico",
                 desc: "2 Bolas (180g). A dupla perfeita de sabores.",
                 preco: "18,90",
-                tamanho_fonte: "1.1rem",
+                tamanho_fonte: "0.95rem",
                 destaque: true,
                 tag: "O MAIS PEDIDO"
             },
@@ -46,78 +50,86 @@ const MENU_DATA = {
                 nome: "Master",
                 desc: "3 Bolas (270g). Três bolas de pura felicidade!",
                 preco: "27,90",
-                tamanho_fonte: "1.1rem",
+                tamanho_fonte: "0.95rem",
                 destaque: false
             },
             {
                 nome: "Extra Premium",
                 desc: "4 Bolas (360g). Experiência inesquecível de sabor.",
                 preco: "35,90",
-                tamanho_fonte: "1.1rem",
+                tamanho_fonte: "0.95rem",
                 destaque: false
             }
         ],
         servicos: [
-            { nome: "Pote (padrão)", preco: "Incluso", img: "main/pote.jpg" },
-            { nome: "Pote + Casquinho", preco: "+R$ 0,99", img: "main/potecasquinho.jpg" },
-            { nome: "Cestinha de Biscoito", preco: "+R$ 2,30", img: "main/cestinha.jpg" },
-            { nome: "Cascão de Biscoito", preco: "+R$ 1,90", img: "main/cascao.jpg" }
+            { nome: "Pote", preco: "Padrão", img: "main/pote.jpg" },
+            { nome: "Pote + Casquinha", preco: "+R$ 0,99", img: "main/potecasquinho.jpg" },
+            { nome: "Cestinha", preco: "+R$ 2,30", img: "main/cestinha.jpg" },
+            { nome: "Cascão", preco: "+R$ 1,90", img: "main/cascao.jpg" }
         ]
     },
     cafeteria: {
-        titulo: "Cafeteria",
+        titulo: "Cafés & Chás",
         extra: "Grãos selecionados e moídos na hora",
         itens: [
             {
+                nome: "Affogato",
+                desc: "Nossa Especialidade! Sorvete + Expresso.",
+                preco: "19,90",
+                tamanho_fonte: "0.9rem"
+            },
+            {
                 nome: "Expresso",
-                desc: "Curto ou Longo (50ml). Intenso.",
-                preco: "7,50",
-                tamanho_fonte: "1rem",
-                icone: "coffee"
+                desc: "Grão especial + Shot água com gás.",
+                preco: "8,90",
+                tamanho_fonte: "0.9rem"
             },
             {
-                nome: "Expresso c/ Chantilly",
-                desc: "O clássico com toque de cremosidade.",
-                preco: "10,90",
-                tamanho_fonte: "1rem"
-            },
-            {
-                nome: "Cappuccino",
+                nome: "Cappuccino Cremoso",
                 desc: "Leite vaporizado, pó de preparo e canela.",
                 preco: "16,90",
-                tamanho_fonte: "1rem",
-                icone: "mug-hot"
+                tamanho_fonte: "0.9rem"
             },
             {
                 nome: "Mocaccino",
                 desc: "Chocolate, leite vaporizado e expresso.",
                 preco: "17,90",
-                tamanho_fonte: "1rem"
+                tamanho_fonte: "0.9rem"
             }
         ]
     },
     salgados: {
         titulo: "Delícias Salgadas",
         itens: [
-            { nome: "Coxinha de Frango", preco: "8,90" },
-            { nome: "Coxinha c/ Requeijão", preco: "9,90" },
-            { nome: "Pão de Queijo (2 und)", preco: "9,90" },
-            { nome: "Mini Croissants (2 und)", preco: "5,90" },
-            { nome: "Croissant Simples", preco: "9,90" }
+            { nome: "Mini Croissants (2 und)", preco: "R$ 5,90" },
+            { nome: "Mini Croissants c/ Req (2 und)", preco: "R$ 6,90" },
+            { nome: "Coxinha de Frango", preco: "R$ 8,90" },
+            { nome: "Coxinha c/ Requeijão", preco: "R$ 9,90" },
+            { nome: "Pão de Queijo (2 und)", preco: "R$ 9,90" }
         ],
         destaques: [
-            { nome: "Croissant Frango / Requeijão", preco: "18,90", icone: "bread-slice" },
-            { nome: "Croissant Carne / Requeijão", preco: "21,90", icone: "utensils" },
-            { nome: "Croissant Queijo do Reino", preco: "23,90", icone: "cheese" }
+            { nome: "Croissants Simples", preco: "R$ 9,90" },
+            { nome: "Croissant Peito de Peru c/ Queijo", preco: "16,90" },
+            { nome: "Croissant Frango c/ Requeijão", preco: "18,90" },
+            //{ nome: "Croissant Carne c/ Requeijão", preco: "21,90" },
+            { nome: "Croissant Peito Peru c/ Queijo do Reino", preco: "22,90" },
+            { nome: "Croissant Queijo do Reino", preco: "23,90" }
         ]
     },
     doces: {
         titulo: "Sobremesas & Doces",
+        destaques_extra: {
+            titulo: "Combos em Destaque",
+            itens: [
+                { nome: "Alegria a Dois", preco: "49,90", desc: "2x Clássico + 1 Fatia de Torta" },
+                { nome: "Clássico Crocks", preco: "25,90", desc: "1x Clássico + Cookie ou Brownie" }
+            ]
+        },
         milkshake: {
-            titulo: "Milkshake Crocks",
-            desc: "Ultra cremoso com sorvete artesanal",
-            p: { tamanho: "300ml", preco: "19,90" },
-            g: { tamanho: "500ml", preco: "25,90" }
+            titulo: "Milkshakes",
+            desc: "Cremosos e Artesanais",
+            p: { tamanho: "300ml (270g)", preco: "27,90" },
+            g: { tamanho: "500ml (450g)", preco: "39,90" }
         },
         petit_gateau: {
             titulo: "Petit Gâteau",
@@ -129,27 +141,30 @@ const MENU_DATA = {
         outros: [
             {
                 titulo: "Cookies & Brownies",
-                desc: "Receita exclusiva Crocks",
                 cor: "teal",
                 itens: [
-                    { nome: "Cookie Belga", preco: "12,90" },
-                    { nome: "Brownie Tradicional", preco: "13,90" }
-                ],
-                tamanho_fonte: "1.95rem"
+                    { nome: "Cookie Belga", preco: "8,90" },
+                    { nome: "Brownie", preco: "8,90" },
+                    { nome: "Big Cookie Chocolatudo", preco: "13,90" }
+                ]
             },
             {
-                titulo: "Tortas Finas",
-                desc: "Fatias selecionadas",
+                titulo: "Tortas (Fatias)",
                 cor: "pink",
-                preco: "16,90",
-                tamanho_fonte: "1.95rem"
+                itens: [
+                    { nome: "Alemã", preco: "19,90" },
+                    { nome: "Limão", preco: "19,90" },
+                    { nome: "Cheesecake", preco: "19,90" }
+                ]
             },
             {
-                titulo: "Chás (150ml)",
-                desc: "Quente ou Gelado",
+                titulo: "Bebidas",
                 cor: "orange",
-                preco: "4,90",
-                tamanho_fonte: "1.95rem"
+                itens: [
+                    { nome: "Água S/ Gás", preco: "4,90" },
+                    { nome: "Água C/ Gás", preco: "5,90" },
+                    { nome: "Refrigerantes", preco: "6,90" }
+                ]
             }
         ]
     }
