@@ -146,7 +146,7 @@ const MENU_DATA = {
         },
         petit_gateau: {
             titulo: "Petit Gâteau",
-            desc: "Bolinho quente com recheio cremoso e uma bola de sorvete.",
+            desc: "",
             preco: "24,90",
             tamanho_fonte: "0.95rem",
             img_fundo: "main/petitgateau.jpg"
