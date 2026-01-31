@@ -103,7 +103,7 @@ const MENU_DATA = {
             //    tamanho_fonte: "0.9rem"
            // },
             {
-                nome: "Chás (Gelado ou Quente)",
+                nome: "Chás (Quente ou Frio)",
                 desc: "Hibisco, Camomila com Maracujá, Verde, Morango com Laranja, Abacaxi com Hortelã.",
                 preco: "4,90",
                 tamanho_fonte: "0.9rem"
