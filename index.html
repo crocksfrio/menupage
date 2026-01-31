@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light only">
+    <title>Crocks Frio - Menu Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="main/menu-data.js"></script>
+
+    <style>
+        :root { 
+            color-scheme: light !important; 
+            /* AJUSTE FINO DO ZOOM APENAS PARA O MENU (DIREITA) */
+            --menu-zoom: 0.8;
+        }
+        html, body {
+            background-color: #f8f9fa !important;
+            color: #1f2937 !important;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            filter: brightness(1) contrast(1) !important;
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+        }
+        
+        /* Container que receberá o zoom (Lado Direito) */
+        #zoom-container {
+            transform: scale(var(--menu-zoom));
+            transform-origin: top left;
+            /* Calcula a largura para compensar a escala: 1 / 0.8 = 1.25 (125%) */
+            width: calc(100% / var(--menu-zoom));
+            height: calc(100% / var(--menu-zoom));
+        }
+
+        .font-display { font-family: 'Fredoka', sans-serif; }
+        
+        .slide-fade { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .price-tag {
+            background: linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%) !important;
+            color: white !important;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-weight: 800;
+            white-space: nowrap !important;
+            display: inline-block;
+            font-size: 1.5rem;
+        }
+
+        .media-container img {
+            width: 100%; height: 100%; object-fit: cover; position: absolute;
+            top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out;
+        }
+        .media-container img.active { opacity: 1; }
+        .text-shadow { text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
+
+        /* Ajustes finos para TV 32" */
+        h2 { font-size: 2.2rem !important; line-height: 1.1; margin-bottom: 1rem !important; }
+        .item-title { font-size: 1.2rem; font-weight: 800; }
+        .item-desc { font-size: 0.95rem; color: #6b7280; line-height: 1.1; }
+    </style>
+</head>
+<body class="flex bg-gray-50 overflow-hidden">
+
+    <!-- ESQUERDA: MÍDIA (40%) - SEM ZOOM -->
+    <div class="w-[40%] h-full relative bg-black overflow-hidden shadow-2xl z-10 media-container" id="media-container">
+        <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black/90 to-transparent z-20"></div>
+        <div class="absolute bottom-10 left-10 z-30 text-white">
+            <h2 class="font-display font-bold text-teal-400 mb-1 text-shadow">Crocks Frio</h2>
+            <p class="text-xl opacity-90 text-shadow">Gelados Artesanais & Café</p>
+        </div>
+    </div>
+
+    <!-- DIREITA: CARDÁPIO (60%) -->
+    <div class="w-[60%] h-full relative bg-white overflow-hidden">
+        <!-- Div Interna que sofre o Zoom -->
+        <div id="zoom-container" class="flex flex-col">
+            <div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            
+            <!-- Cabeçalho -->
+            <div class="h-[10vh] flex items-center justify-between px-8 border-b border-gray-100 bg-white/95 z-20">
+                <div class="flex items-center gap-4">
+                    <i class="fas fa-ice-cream text-3xl text-teal-500"></i>
+                    <h1 class="text-2xl font-display font-bold text-gray-800 uppercase tracking-wide">Cardápio</h1>
+                </div>
+                <div class="text-teal-600 font-bold text-lg flex items-center gap-2">
+                    <i class="fab fa-instagram"></i> @crocksfrio.oficial
+                </div>
+            </div>
+
+            <!-- Conteúdo Dinâmico -->
+            <div class="flex-1 p-8 relative z-10 flex flex-col justify-center" id="menu-content">
+                <div class="flex items-center justify-center h-full text-gray-400 font-display italic animate-pulse">
+                    Carregando Cardápio...
+                </div>
+            </div>
+
+            <!-- Barra de Progresso -->
+            <div class="h-0.5 w-full bg-gray-100 absolute bottom-0 left-0 z-30">
+                <div id="progress-bar" class="h-full bg-teal-500 w-0 transition-all duration-[linear]"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SLIDE_DURATION = 5000;
+        const DEFAULT_DATA = { combos: { itens: [] }, sorvetes: { titulo: "Sorvetes", itens: [], servicos: [] }, cafeteria: { titulo: "Café", itens: [] }, salgados: { titulo: "Salgados", itens: [], destaques: [] }, doces: { titulo: "Doces", milkshake: {}, petit_gateau: {}, outros: [] } };
+        function getSafeData() { return (typeof MENU_DATA !== 'undefined') ? MENU_DATA : DEFAULT_DATA; }
+
+        const contentData = [
+            {
+                media: [{ src: 'main/ice1.jpg', fb: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb' }],
+                getHtml: () => {
+                    const d = getSafeData().sorvetes;
+                    const items = d.itens.map((item, idx) => {
+                        const colors = ['teal', 'orange', 'purple', 'pink'];
+                        const color = colors[idx % colors.length];
+                        const highlight = item.destaque ? `ring-2 ring-teal-100 bg-teal-50/10` : `bg-white`;
+                        return `<div class="${highlight} p-4 rounded-xl shadow-sm border-l-4 border-${color}-400 flex flex-col justify-between h-32">
+                            <div><h3 class="item-title uppercase truncate">${item.nome}${item.destaque ? '<span class="ml-2 text-[8px] bg-yellow-400 px-1 rounded align-top">MAIS PEDIDO</span>' : ''}</h3>
+                            <p class="item-desc text-gray-800" style="font-size:${item.tamanho_fonte}">${item.desc}</p></div>
+                            <div class="text-right"><span class="price-tag">R$ ${item.preco}</span></div>
+                        </div>`;
+                    }).join('');
+
+                    const services = d.servicos.map(s => `
+                        <div class="flex flex-col items-center">
+                            <div class="w-[150px] h-[150px] rounded-full overflow-hidden border border-teal-100 mb-1">
+                                <img src="${s.img}" onerror="this.src='https://placehold.co/100x100?text=S'" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-[15px] font-bold uppercase text-gray-500">${s.nome}</span>
+                            <span class="text-[20px] font-black text-teal-600">${s.preco}</span>
+                        </div>
+                    `).join('');
+
+                    return `<div class="slide-fade h-full flex flex-col justify-between">
+                        <div><h2 class="font-display font-bold text-teal-600 border-l-8 border-teal-500 pl-4 uppercase">${d.titulo}</h2>
+                        <div class="grid grid-cols-2 gap-4">${items}</div></div>
+                        <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 mt-4">
+                            <h3 class="text-[13px] font-bold text-gray-900 uppercase mb-2 text-center tracking-widest">Como quer ser servido?</h3>
+                            <div class="grid grid-cols-4 gap-2">${services}</div>
+                        </div>
+                    </div>`;
+                }
+            },
+            {
+                media: [{ src: 'main/cafe.jpg', fb: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf' }],
+                getHtml: () => {
+                    const data = getSafeData();
+                    const cafe = data.cafeteria;
+                    const salg = data.salgados;
+                    const cafeItems = cafe.itens.map(i => `<div class="flex justify-between items-center bg-white p-3 rounded-lg border-b border-gray-50 shadow-sm">
+                        <div class="leading-tight"><span class="font-bold text-gray-800 text-lg">${i.nome}</span><p class="text-[11px] text-gray-700" style="font-size:${i.tamanho_fonte}">${i.desc}</p></div>
+                        <span class="text-xl font-black text-amber-700 ml-3 flex-shrink-0 text-right">R$ ${i.preco}</span>
+                    </div>`).join('');
+                    const salgItems = salg.itens.slice(0, 6).map(i => `<div class="flex justify-between items-center py-1.5 border-b border-dashed border-gray-200">
+                        <span class="font-bold text-sm text-gray-700 truncate">${i.nome}</span><span class="font-black text-lg text-gray-900 ml-2 flex-shrink-0">${i.preco}</span>
+                    </div>`).join('');
+
+                    return `<div class="slide-fade grid grid-cols-2 gap-8 h-full">
+                        <div class="flex flex-col"><h2 class="font-display font-bold text-amber-800 border-l-8 border-amber-600 pl-4 uppercase">${cafe.titulo}</h2>
+                        <div class="space-y-2">${cafeItems}</div><div class="bg-green-50 p-2 rounded text-green-700 text-[15px] font-bold text-center border border-green-100 flex items-center justify-center gap-2"><i class="fas fa-seedling"></i> ${cafe.extra}</div></div>
+                        <div class="flex flex-col"><h2 class="font-display font-bold text-orange-600 border-l-8 border-orange-500 pl-4 uppercase">${salg.titulo}</h2>
+                        <div class="bg-gray-50/50 p-3 rounded-xl mb-4">${salgItems}</div>
+                        <div class="space-y-2">${salg.destaques.slice(0,6).map(d => `<div class="bg-orange-600 text-white p-3 rounded-xl flex justify-between items-center shadow-md">
+                            <span class="font-black text-[11px] uppercase truncate mr-2">${d.nome}</span><span class="font-black text-lg flex-shrink-0">R$ ${d.preco}</span>
+                        </div>`).join('')}</div></div>
+                    </div>`;
+                }
+            },
+            {
+                media: [{ src: 'main/doces.jpg', fb: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699' }],
+                getHtml: () => {
+                    const data = getSafeData();
+                    const doces = data.doces;
+                    const ms = doces.milkshake;
+                    const pg = doces.petit_gateau;
+                    const extra = doces.destaques_extra;
+                    
+                    return `<div class="slide-fade h-full flex flex-col">
+                        <h2 class="font-display font-bold text-pink-600 border-l-8 border-pink-500 pl-4 uppercase">${doces.titulo}</h2>
+                        <div class="grid grid-cols-12 gap-4 mb-4">
+                            <div class="col-span-5 flex flex-col gap-3">
+                                <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                                    <h3 class="text-lg font-black text-pink-800 mb-1 uppercase">${ms.titulo}</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between items-center p-2 rounded text-[18px] font-bold"><span>${ms.p.tamanho}</span><span class="text-[16px] text-pink-600 font-bold">R$ ${ms.p.preco}</span></div>
+                                        <div class="flex justify-between items-center p-2 rounded text-[18px] font-bold"><span>${ms.g.tamanho}</span><span class="text-[16px] text-pink-600 font-bold">R$ ${ms.g.preco}</span></div>
+                                    </div>
+                                </div>
+                                <div class="bg-teal-50 p-3 rounded-2xl border border-teal-100 flex-1">
+                                    <h3 class="text-lg font-black text-teal-800 mb-2 uppercase tracking-widest">${extra.titulo}</h3>
+                                    ${extra.itens.map(c => `
+                                        <div class="mb-2 last:mb-0">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-[18px] font-bold text-gray-700">${c.nome}</span>
+                                                <span class="text-[16px] font-black text-teal-600">R$ ${c.preco}</span>
+                                            </div>
+                                            <p class="text-[8px] text-gray-400 leading-none">${c.desc}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="col-span-7 bg-amber-900 rounded-2xl p-4 text-white flex flex-col justify-between relative shadow-lg min-h-[350px]" style="background-image: url('${pg.img_fundo}'); background-size:cover; background-position: center;">
+                                <div>
+                                    <h3 class="text-2xl font-display font-bold text-shadow uppercase">${pg.titulo}</h3>
+                                    <p class="text-[10px] text-amber-100 uppercase mb-2 font-bold" style="font-size:${pg.tamanho_fonte}">${pg.desc}</p>
+                                </div>
+                                <div class="text-right"><span class="text-3xl font-black text-yellow-400 text-shadow flex-shrink-0">R$ ${pg.preco}</span></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            ${doces.outros.map(g => `<div class="bg-white p-3 rounded-xl shadow-sm border-t-4 border-${g.cor}-400">
+                                <h4 class="font-black text-base text-gray-700 uppercase mb-1">${g.titulo}</h4>
+                                ${g.itens ? g.itens.map(i => `<div class="flex justify-between items-center text-[16px] mb-0.5 border-b border-gray-50 pb-0.5"><span>${i.nome}</span><span class="font-bold flex-shrink-0 text-[14px]">R$ ${i.preco}</span></div>`).join('') : `<div class="flex justify-between items-center p-2 text-right font-black text-[14px] text-${g.cor}-600 flex-shrink-0">R$ ${g.preco}</div>`}
+                            </div>`).join('')}
+                        </div>
+                    </div>`;
+                }
+            }
+        ];
+
+        let slideIdx = 0;
+        let mediaRotation = null;
+        const mediaBox = document.getElementById('media-container');
+        const menuBox = document.getElementById('menu-content');
+        const pBar = document.getElementById('progress-bar');
+
+        function runSlide() {
+            const data = contentData[slideIdx];
+            menuBox.innerHTML = data.getHtml();
+            pBar.style.transition = 'none';
+            pBar.style.width = '0%';
+            setTimeout(() => { pBar.style.transition = `width ${SLIDE_DURATION}ms linear`; pBar.style.width = '100%'; }, 100);
+            
+            // Troca de mídia
+            const item = data.media[0];
+            const img = document.createElement('img');
+            img.src = item.src; img.onerror = () => { img.src = item.fb; };
+            const currentImgs = mediaBox.querySelectorAll('img');
+            mediaBox.prepend(img);
+            setTimeout(() => { img.classList.add('active'); if (currentImgs[0]) currentImgs[0].style.opacity = '0'; setTimeout(() => currentImgs.forEach(i => i.remove()), 1000); }, 100);
+
+            slideIdx = (slideIdx + 1) % contentData.length;
+        }
+
+        window.onload = () => { setTimeout(runSlide, 800); setInterval(runSlide, SLIDE_DURATION); };
+    </script>
+</body>
+</html>
