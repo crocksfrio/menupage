@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Display - Crocks Frio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Scripts de Dados -->
+    <script src="social-config.js"></script>
+    <script src="reviews.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f2f5;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+        }
+
+        .font-display { font-family: 'Fredoka', sans-serif; }
+        
+        /* Área do Vídeo Vertical - Ocupa exatamente 35% da largura e 100% da altura */
+        .video-container {
+            width: 35vw; 
+            height: 100vh;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        #player, #preloader {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Preloader invisível para forçar cache do próximo vídeo */
+        #preloader {
+            display: none;
+        }
+
+        /* Área de Conteúdo - Ocupa os 65% restantes da largura e 100% da altura */
+        .content-area {
+            width: 65vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 3.5vh 3vw; 
+            background: white;
+            position: relative;
+            justify-content: space-between;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2vh 1.5vw;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 1.5vh;
+            opacity: 0;
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .progress-container {
+            width: 15vw;
+        }
+        .progress-bar-bg { width: 100%; height: 1vh; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: #14b8a6; width: 0%; transition: width linear; }
+
+        .qr-frame {
+            background: white;
+            padding: 2vh;
+            border-radius: 2rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 4px solid #f8fafc;
+            display: inline-block;
+        }
+
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Ajustes de escala para fontes baseados na altura da tela (vh) */
+        .text-title { font-size: 6vh; }
+        .text-subtitle { font-size: 2vh; }
+        .text-review-body { font-size: 2.5vh; }
+        .text-qr-title { font-size: 5vh; }
+        .text-qr-desc { font-size: 2.8vh; }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <video id="player" muted playsinline autoplay></video>
+        <!-- Vídeo oculto apenas para carregar o cache do próximo -->
+        <video id="preloader" muted playsinline preload="auto"></video>
+    </div>
+
+    <div class="content-area">
+        <!-- Header -->
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-title font-display font-bold text-teal-600 leading-none">Crocks Frio</h1>
+                <p class="text-subtitle text-gray-400 font-bold uppercase tracking-widest mt-2">Sua felicidade em cada colherada</p>
+            </div>
+            <div class="bg-teal-50 text-teal-600 px-4 py-2 rounded-xl font-black text-xs border border-teal-100 uppercase tracking-tighter">
+                Social Display
+            </div>
+        </div>
+
+        <!-- Área Dinâmica -->
+        <div id="dynamic-area" class="flex-grow flex flex-col justify-center">
+            <!-- Conteúdo injetado via JS -->
+        </div>
+
+        <!-- Footer -->
+        <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-3xl shadow-md">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-[1.2vh] font-bold uppercase tracking-widest">Siga no Instagram</p>
+                    <p class="text-[3.5vh] font-black text-gray-800 leading-none" id="insta-handle">@crocksfrio.oficial</p>
+                </div>
+            </div>
+            
+            <div class="progress-container text-right">
+                <p class="text-[1.2vh] font-bold text-gray-300 uppercase mb-2 tracking-widest">Próximo</p>
+                <div class="progress-bar-bg">
+                    <div id="progress-fill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let videoIdx = 0;
+        let slideIdx = 0;
+        const player = document.getElementById('player');
+        const preloader = document.getElementById('preloader');
+        const dynamicArea = document.getElementById('dynamic-area');
+        const progressFill = document.getElementById('progress-fill');
+
+        function init() {
+            if (typeof SOCIAL_CONFIG !== 'undefined') {
+                document.getElementById('insta-handle').innerText = SOCIAL_CONFIG.instagram.handle;
+                playNextVideo();
+            }
+            updateContent();
+            setInterval(updateContent, (typeof SOCIAL_CONFIG !== 'undefined' ? SOCIAL_CONFIG.tempoSlideAvaliacao : 10000));
+        }
+
+        function playNextVideo() {
+            if (typeof SOCIAL_CONFIG === 'undefined' || !SOCIAL_CONFIG.videos || SOCIAL_CONFIG.videos.length === 0) return;
+            
+            const videoList = SOCIAL_CONFIG.videos;
+            
+            // Define o vídeo atual
+            player.src = videoList[videoIdx];
+            player.play().catch(e => console.log("Erro Play:", e));
+
+            // Lógica de Cache/Preload: Carrega o PRÓXIMO vídeo em segundo plano
+            const nextIdx = (videoIdx + 1) % videoList.length;
+            preloader.src = videoList[nextIdx];
+            preloader.load(); // Inicia o download silencioso
+
+            videoIdx = nextIdx;
+        }
+
+        player.onended = playNextVideo;
+
+        function updateContent() {
+            let html = '';
+            const config = (typeof SOCIAL_CONFIG !== 'undefined') ? SOCIAL_CONFIG : { tempoSlideAvaliacao: 10000 };
+
+            if (slideIdx === 0) {
+                const reviewsBase = (typeof GOOGLE_REVIEWS_DATA !== 'undefined') ? GOOGLE_REVIEWS_DATA : [];
+                const shuffled = [...reviewsBase].sort(() => 0.5 - Math.random());
+                const selection = shuffled.slice(0, 3);
+
+                html = `
+                    <div class="fade-in">
+                        <div class="flex items-center gap-3 mb-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-10">
+                            <h2 class="text-[4vh] font-black text-gray-700 uppercase tracking-tight">O que dizem sobre nós</h2>
+                        </div>
+                        <div class="flex flex-col">
+                `;
+
+                selection.forEach((rev, i) => {
+                    let stars = '';
+                    for(let j=0; j<5; j++) {
+                        stars += `<i class="fas fa-star ${j < rev.estrelas ? 'text-yellow-400' : 'text-gray-200'} text-[2vh]"></i>`;
+                    }
+                    const avatar = rev.foto_perfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(rev.nome)}&background=random&color=fff&size=100`;
+                    
+                    html += `
+                        <div class="review-card" style="animation-delay: ${i * 0.15}s">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-4">
+                                    <img src="${avatar}" class="w-12 h-12 rounded-full border border-gray-100 shadow-sm">
+                                    <span class="font-bold text-gray-800 uppercase text-[2.5vh]">${rev.nome}</span>
+                                </div>
+                                <div class="flex gap-1">${stars}</div>
+                            </div>
+                            <p class="text-gray-600 italic text-review-body leading-tight text-truncate-2">"${rev.texto}"</p>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+            } 
+            else if (slideIdx === 1) {
+                const link = (typeof SOCIAL_CONFIG !== 'undefined') ? SOCIAL_CONFIG.instagram.link : "#";
+                html = `
+                    <div class="fade-in flex flex-col items-center text-center">
+                        <div class="w-20 h-20 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center text-5xl mb-6">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h2 class="text-qr-title font-display font-bold text-gray-800 mb-2 leading-none">Apareça no nosso feed!</h2>
+                        <p class="text-qr-desc text-gray-500 mb-8 max-w-xl mx-auto leading-tight">
+                            Poste sua foto, <b>marque a gente</b> nos Stories e siga nosso perfil para novidades!
+                        </p>
+                        <div class="qr-frame">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(link)}" class="w-[20vw] h-[20vw] max-w-[300px] max-h-[300px]">
+                        </div>
+                        <p class="mt-6 font-black text-gray-400 uppercase tracking-widest text-[1.5vh]">Escaneie para seguir</p>
+                    </div>
+                `;
+            } 
+            else {
+                const link = (typeof SOCIAL_CONFIG !== 'undefined') ? SOCIAL_CONFIG.googleReviewLink : "#";
+                html = `
+                    <div class="fade-in flex flex-col items-center text-center">
+                        <div class="w-20 h-20 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center text-5xl mb-6">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <h2 class="text-qr-title font-display font-bold text-gray-800 mb-2 leading-none">Sua opinião vale muito!</h2>
+                        <p class="text-qr-desc text-gray-500 mb-8 max-w-xl mx-auto leading-tight">
+                            Amou o sabor? <b>Escaneie o código</b> e nos dê 5 estrelas! Sua avaliação nos faz crescer.
+                        </p>
+                        <div class="qr-frame">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(link)}" class="w-[20vw] h-[20vw] max-w-[300px] max-h-[300px]">
+                        </div>
+                        <p class="mt-6 font-black text-gray-400 uppercase tracking-widest text-[1.5vh]">Escaneie para avaliar</p>
+                    </div>
+                `;
+            }
+
+            dynamicArea.innerHTML = html;
+
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            setTimeout(() => {
+                progressFill.style.transition = `width ${config.tempoSlideAvaliacao}ms linear`;
+                progressFill.style.width = '100%';
+            }, 50);
+
+            slideIdx = (slideIdx + 1) % 3;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
