@@ -1,4 +1,4 @@
-// Gerado automaticamente - 19/02/2026 04:57:29
+// Gerado automaticamente - 19/02/2026 05:05:18
 const GOOGLE_REVIEWS_DATA = [
     {
         "nome": "Heloiza Cabral",
