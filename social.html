@@ -3,195 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Display - Crocks Frio</title>
+    <title>Social TV - Crocks Frio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Importação dos arquivos de dados -->
     <script src="social-config.js"></script>
+    <script src="reviews.js"></script>
+
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f0f2f5;
-            overflow: hidden;
-            height: 100vh;
-            margin: 0;
-        }
+        body { font-family: 'Nunito', sans-serif; background: #f0f2f5; overflow: hidden; height: 100vh; margin: 0; display: flex; }
         .font-display { font-family: 'Fredoka', sans-serif; }
         
-        /* Área do Vídeo 9:16 */
-        .video-container {
-            width: 40%; /* Ajustado para dar destaque ao vídeo vertical */
-            height: 100vh;
-            background: #000;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        video {
-            height: 100%;
-            width: 100%;
-            object-fit: cover; /* Preenche a área 9:16 */
-        }
+        .video-container { width: 40%; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; box-shadow: 5px 0 15px rgba(0,0,0,0.1); z-index: 10; }
+        video { height: 100%; width: 100%; object-fit: cover; }
 
-        /* Área de Conteúdo à Direita */
-        .content-container {
-            width: 60%;
-            height: 100vh;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
-        }
+        .content-container { width: 60%; height: 100vh; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; background: white; }
 
-        .fade-in {
-            animation: fadeIn 0.8s ease-in-out;
-        }
+        .review-card { background: #fff; padding: 16px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; margin-bottom: 12px; animation: slideUp 0.6s ease-out forwards; opacity: 0; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .qr-card {
-            background: white;
-            padding: 20px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-            border: 2px solid #f0f0f0;
-        }
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #14b8a6; width: 0%; transition: width linear; }
     </style>
 </head>
-<body class="flex">
+<body>
 
-    <!-- Lado Esquerdo: Vídeos -->
     <div class="video-container">
         <video id="player" muted playsinline></video>
     </div>
 
-    <!-- Lado Direito: Engajamento -->
     <div class="content-container">
-        
-        <!-- Cabeçalho -->
-        <div class="flex items-center justify-between mb-8">
-            <h1 class="text-4xl font-display font-bold text-teal-600">Crocks Frio</h1>
-            <div class="text-right">
-                <p class="text-gray-400 text-sm font-bold uppercase tracking-widest">Acompanhe nossas novidades</p>
-            </div>
-        </div>
-
-        <!-- Área Dinâmica (Avaliações ou Redes Sociais) -->
-        <div id="dynamic-area" class="flex-grow flex flex-col justify-center">
-            <!-- Conteúdo será inserido pelo JS -->
-        </div>
-
-        <!-- Rodapé / Progresso -->
-        <div class="mt-8 flex justify-between items-end">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
             <div>
-                <p class="text-gray-500 font-bold mb-1">Nosso Instagram</p>
-                <p class="text-3xl font-black text-pink-500" id="insta-handle">@seu_instagram</p>
+                <h1 class="text-4xl font-display font-bold text-teal-600">Crocks Frio</h1>
+                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-tighter">Sua felicidade em cada colherada</p>
             </div>
-            <div class="w-1/2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div id="progress-bar" class="h-full bg-teal-500 transition-all duration-100" style="width: 0%"></div>
+            <div class="bg-teal-50 px-3 py-1 rounded-full text-teal-600 text-[10px] font-black border border-teal-100">SOCIAL TV</div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div id="dynamic-area" class="flex-grow flex flex-col justify-center"></div>
+
+        <!-- Footer -->
+        <div class="border-t pt-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-pink-500 rounded-xl flex items-center justify-center text-white text-lg"><i class="fab fa-instagram"></i></div>
+                <div>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase">Siga a gente</p>
+                    <p class="text-xl font-black text-gray-800" id="insta-tag">@carregando</p>
+                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="progress-bar w-32 mb-1"><div id="p-fill" class="progress-fill"></div></div>
+                <p class="text-[8px] font-bold text-gray-300 uppercase">Próximo conteúdo</p>
             </div>
         </div>
     </div>
 
     <script>
-        let videoIdx = 0;
-        let slideIdx = 0;
+        let vIdx = 0;
+        let sIdx = 0;
         const player = document.getElementById('player');
-        const dynamicArea = document.getElementById('dynamic-area');
-        const progressBar = document.getElementById('progress-bar');
-        const instaHandleText = document.getElementById('insta-handle');
+        const area = document.getElementById('dynamic-area');
+        const pFill = document.getElementById('p-fill');
 
-        // Inicializa dados do config
-        instaHandleText.innerText = SOCIAL_CONFIG.instagram.handle;
-
-        // Gerenciador de Vídeos
-        function playNextVideo() {
-            if (SOCIAL_CONFIG.videos.length === 0) return;
-            player.src = SOCIAL_CONFIG.videos[videoIdx];
-            player.play().catch(e => console.log("Aguardando interação para vídeo"));
-            videoIdx = (videoIdx + 1) % SOCIAL_CONFIG.videos.length;
+        function start() {
+            document.getElementById('insta-tag').innerText = SOCIAL_CONFIG.instagram.handle;
+            playVideo();
+            update();
+            setInterval(update, SOCIAL_CONFIG.tempoSlideAvaliacao);
         }
 
-        player.onended = playNextVideo;
+        function playVideo() {
+            if (!SOCIAL_CONFIG.videos.length) return;
+            player.src = SOCIAL_CONFIG.videos[vIdx];
+            player.play().catch(() => {});
+            vIdx = (vIdx + 1) % SOCIAL_CONFIG.videos.length;
+        }
+        player.onended = playVideo;
 
-        // Gerenciador de Slides da Direita
-        function updateRightSlide() {
-            const totalSlides = 3; // 0: Avaliação, 1: Instagram QR, 2: Google QR
+        function update() {
             let html = '';
+            if (sIdx === 0) {
+                // Sorteia 3 avaliações do arquivo reviews.js
+                const pool = (typeof GOOGLE_REVIEWS_DATA !== 'undefined') ? GOOGLE_REVIEWS_DATA : [];
+                const selection = [...pool].sort(() => 0.5 - Math.random()).slice(0, 3);
 
-            if (slideIdx === 0) {
-                // Slide de Avaliação Aleatória
-                const aval = SOCIAL_CONFIG.avaliacoes[Math.floor(Math.random() * SOCIAL_CONFIG.avaliacoes.length)];
-                let stars = '';
-                for(let i=0; i<5; i++) stars += `<i class="fas fa-star ${i < aval.estrelas ? 'text-yellow-400' : 'text-gray-300'}"></i>`;
-
-                html = `
-                    <div class="fade-in text-center px-10">
-                        <div class="mb-6 text-6xl text-teal-100"><i class="fas fa-quote-left"></i></div>
-                        <p class="text-3xl font-bold text-gray-700 italic mb-6">"${aval.texto}"</p>
-                        <div class="text-2xl mb-2">${stars}</div>
-                        <p class="text-xl font-black text-gray-900 uppercase">— ${aval.nome} (Google Maps)</p>
-                    </div>
-                `;
-            } 
-            else if (slideIdx === 1) {
-                // Slide Instagram
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(SOCIAL_CONFIG.instagram.link)}`;
-                html = `
-                    <div class="fade-in grid grid-cols-2 gap-8 items-center">
-                        <div class="qr-card">
-                            <img src="${qrUrl}" alt="QR Instagram" class="mx-auto mb-4 w-64 h-64">
-                            <p class="text-sm font-bold text-gray-400">Escaneie para seguir</p>
-                        </div>
-                        <div>
-                            <h2 class="text-5xl font-display font-bold text-pink-500 mb-4">Poste e Marque a gente!</h2>
-                            <p class="text-2xl text-gray-600 leading-relaxed">Tire uma foto do seu sorvete, poste nos Stories e marque <span class="font-bold text-pink-600">${SOCIAL_CONFIG.instagram.handle}</span> para aparecer aqui!</p>
-                        </div>
-                    </div>
-                `;
-            }
-            else {
-                // Slide Google Reviews
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(SOCIAL_CONFIG.googleReviewLink)}`;
-                html = `
-                    <div class="fade-in grid grid-cols-2 gap-8 items-center">
-                        <div>
-                            <h2 class="text-5xl font-display font-bold text-teal-600 mb-4">Gostou da experiência?</h2>
-                            <p class="text-2xl text-gray-600 leading-relaxed">Sua avaliação no Google nos ajuda muito! Escaneie o código ao lado e deixe seu comentário.</p>
-                        </div>
-                        <div class="qr-card">
-                            <img src="${qrUrl}" alt="QR Google" class="mx-auto mb-4 w-64 h-64">
-                            <p class="text-sm font-bold text-gray-400">Avalie-nos no Google</p>
-                        </div>
-                    </div>
-                `;
+                html = `<div class="fade-in"><h2 class="text-lg font-bold text-gray-700 uppercase mb-4 flex items-center gap-2"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="16"> Clientes no Google</h2><div class="space-y-2">`;
+                selection.forEach((r, i) => {
+                    let stars = ''; for(let j=0; j<5; j++) stars += `<i class="fas fa-star ${j < r.estrelas ? 'text-yellow-400' : 'text-gray-200'} text-[10px]"></i>`;
+                    const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(r.nome)}&background=random&color=fff&size=80`;
+                    html += `<div class="review-card" style="animation-delay:${i*0.2}s"><div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><img src="${avatar}" class="w-8 h-8 rounded-full"><span class="font-black text-xs uppercase">${r.nome}</span></div><div>${stars}</div></div><p class="text-gray-600 text-sm italic leading-tight">"${r.texto}"</p></div>`;
+                });
+                html += `</div></div>`;
+            } else {
+                const isInsta = sIdx === 1;
+                const link = isInsta ? SOCIAL_CONFIG.instagram.link : SOCIAL_CONFIG.googleReviewLink;
+                const title = isInsta ? "Nosso Instagram" : "Dê sua Nota";
+                const icon = isInsta ? "fab fa-instagram text-pink-500" : "fab fa-google text-blue-500";
+                html = `<div class="fade-in flex flex-col items-center text-center"><div class="text-4xl mb-2 ${icon}"></div><h2 class="text-3xl font-display font-bold text-gray-800 mb-1">${title}</h2><p class="text-xs text-gray-400 mb-4 uppercase font-bold">Escaneie para interagir</p><div class="bg-white p-4 rounded-[30px] shadow-lg border-4 border-gray-50"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}" class="w-48 h-48"></div></div>`;
             }
 
-            dynamicArea.innerHTML = html;
-            
-            // Reinicia barra de progresso
-            progressBar.style.transition = 'none';
-            progressBar.style.width = '0%';
-            setTimeout(() => {
-                progressBar.style.transition = `width ${SOCIAL_CONFIG.tempoSlideAvaliacao}ms linear`;
-                progressBar.style.width = '100%';
-            }, 50);
-
-            slideIdx = (slideIdx + 1) % 3;
+            area.innerHTML = html;
+            pFill.style.transition = 'none'; pFill.style.width = '0%';
+            setTimeout(() => { pFill.style.transition = `width ${SOCIAL_CONFIG.tempoSlideAvaliacao}ms linear`; pFill.style.width = '100%'; }, 50);
+            sIdx = (sIdx + 1) % 3;
         }
 
-        // Início
-        window.onload = () => {
-            playNextVideo();
-            updateRightSlide();
-            setInterval(updateRightSlide, SOCIAL_CONFIG.tempoSlideAvaliacao);
-        };
+        window.onload = start;
     </script>
 </body>
 </html>
