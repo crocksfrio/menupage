@@ -7,145 +7,145 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Scripts de Dados -->
     <script src="social-config.js"></script>
+    <script src="reviews.js"></script>
+
     <style>
+        /* Ajuste para garantir que nada saia da tela */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Nunito', sans-serif;
             background-color: #f0f2f5;
             overflow: hidden;
             height: 100vh;
+            width: 100vw;
             margin: 0;
+            display: flex;
         }
+
         .font-display { font-family: 'Fredoka', sans-serif; }
         
+        /* Área do Vídeo Vertical */
         .video-container {
-            width: 42%;
+            width: 45%; 
             height: 100vh;
             background: #000;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
             z-index: 10;
         }
+        
         video {
             height: 100%;
             width: 100%;
             object-fit: cover;
         }
 
-        .content-container {
-            width: 58%;
+        /* Área de Conteúdo Ajustada */
+        .content-area {
+            width: 55%;
             height: 100vh;
-            padding: 50px;
             display: flex;
             flex-direction: column;
+            padding: 40px; 
+            background: white;
+            position: relative;
             justify-content: space-between;
-            background: #ffffff;
-            position: relative;
         }
 
-        /* Estilo Widget Google */
-        .review-widget-card {
-            background: #fff;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid #e5e7eb;
-            margin-bottom: 20px;
-            position: relative;
-            animation: slideUp 0.6s ease-out forwards;
+        .review-card {
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: slideIn 0.5s ease-out forwards;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .google-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #5f6368;
-            margin-bottom: 20px;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #eee;
-            object-fit: cover;
-        }
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .progress-container {
-            width: 100%;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 10px;
+            width: 180px;
+        }
+        .progress-bar-bg { width: 100%; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: #14b8a6; width: 0%; transition: width linear; }
+
+        .qr-frame {
+            background: white;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 4px solid #f8fafc;
+            display: inline-block;
+        }
+
+        /* Helper para textos longos não quebrarem o layout */
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2; /* Adicionado para compatibilidade padrão */
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            margin-top: 20px;
         }
     </style>
 </head>
-<body class="flex">
+<body>
 
-    <!-- Vídeos Verticais -->
     <div class="video-container">
-        <video id="player" muted playsinline></video>
+        <!-- Adicionado autoplay e loop como garantia extra, embora o JS controle a fila -->
+        <video id="player" muted playsinline autoplay></video>
     </div>
 
-    <!-- Conteúdo Estilo Widget -->
-    <div class="content-container">
-        
-        <!-- Topo -->
-        <div class="flex items-center justify-between">
+    <div class="content-area">
+        <!-- Header -->
+        <div class="flex justify-between items-start">
             <div>
-                <h1 class="text-4xl font-display font-bold text-teal-600 mb-1">Crocks Frio</h1>
-                <div class="google-badge">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="18">
-                    <span>Avaliações no Google Maps</span>
-                    <span class="text-yellow-500 flex gap-0.5 ml-2">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </span>
-                    <span class="text-gray-400 font-normal">(4.9/5)</span>
-                </div>
+                <h1 class="text-5xl font-display font-bold text-teal-600 mb-1">Crocks Frio</h1>
+                <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Sua felicidade em cada colherada</p>
             </div>
-            <div class="qr-card p-2 border-2 border-dashed border-teal-200 rounded-xl">
-                 <!-- QR Code Pequeno no topo para incentivar avaliação o tempo todo -->
-                 <img id="qr-mini-google" src="" class="w-20 h-20">
+            <div class="bg-teal-50 text-teal-600 px-4 py-1 rounded-xl font-black text-xs border border-teal-100 uppercase tracking-tighter">
+                Social Display
             </div>
         </div>
 
-        <!-- Área Central Dinâmica -->
-        <div id="dynamic-area" class="flex-grow flex flex-col justify-center py-10">
-            <!-- Widgets de Reviews entrarão aqui -->
+        <!-- Área Dinâmica -->
+        <div id="dynamic-area" class="flex-grow flex flex-col justify-center py-6">
+            <!-- Conteúdo injetado via JS -->
         </div>
 
-        <!-- Rodapé -->
-        <div class="border-t border-gray-100 pt-6">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center gap-3">
-                    <div class="bg-pink-500 p-3 rounded-full text-white">
-                        <i class="fab fa-instagram text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-gray-400 text-xs font-bold uppercase">Siga no Instagram</p>
-                        <p class="text-2xl font-black text-gray-800" id="insta-handle">@carregando...</p>
-                    </div>
+        <!-- Footer -->
+        <div class="pt-6 border-t border-gray-100 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-xl shadow-md">
+                    <i class="fab fa-instagram"></i>
                 </div>
-                <div class="text-right">
-                    <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-1">Próxima atualização</p>
-                    <div class="progress-container w-48">
-                        <div id="progress-bar" class="h-full bg-teal-500" style="width: 0%"></div>
-                    </div>
+                <div>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Siga no Instagram</p>
+                    <p class="text-xl font-black text-gray-800" id="insta-handle">@crocksfrio.oficial</p>
+                </div>
+            </div>
+            
+            <div class="progress-container text-right">
+                <p class="text-[10px] font-bold text-gray-300 uppercase mb-1 tracking-widest">Próximo</p>
+                <div class="progress-bar-bg">
+                    <div id="progress-fill" class="progress-bar-fill"></div>
                 </div>
             </div>
         </div>
@@ -156,96 +156,132 @@
         let slideIdx = 0;
         const player = document.getElementById('player');
         const dynamicArea = document.getElementById('dynamic-area');
-        const progressBar = document.getElementById('progress-bar');
-        const instaHandleText = document.getElementById('insta-handle');
-        const qrMini = document.getElementById('qr-mini-google');
+        const progressFill = document.getElementById('progress-fill');
 
         function init() {
             if (typeof SOCIAL_CONFIG !== 'undefined') {
-                instaHandleText.innerText = SOCIAL_CONFIG.instagram.handle;
-                qrMini.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(SOCIAL_CONFIG.googleReviewLink)}`;
-                
+                document.getElementById('insta-handle').innerText = SOCIAL_CONFIG.instagram.handle;
                 playNextVideo();
-                updateContent();
-                setInterval(updateContent, SOCIAL_CONFIG.tempoSlideAvaliacao);
             }
+            updateContent();
+            setInterval(updateContent, (typeof SOCIAL_CONFIG !== 'undefined' ? SOCIAL_CONFIG.tempoSlideAvaliacao : 10000));
         }
 
         function playNextVideo() {
-            if (!SOCIAL_CONFIG.videos || SOCIAL_CONFIG.videos.length === 0) return;
+            // Verificação de segurança para a existência da configuração
+            if (typeof SOCIAL_CONFIG === 'undefined' || !SOCIAL_CONFIG.videos || SOCIAL_CONFIG.videos.length === 0) {
+                console.error("Configuração de vídeos não encontrada.");
+                return;
+            }
+            
             player.src = SOCIAL_CONFIG.videos[videoIdx];
-            player.play().catch(() => console.log("User interaction needed"));
+            player.load(); // Garante o carregamento do novo source
+            
+            player.play().then(() => {
+                console.log("Reproduzindo vídeo:", SOCIAL_CONFIG.videos[videoIdx]);
+            }).catch(e => {
+                console.log("Erro ao dar play (pode exigir interação do usuário):", e);
+                // Tenta dar play novamente em 1 segundo caso falhe
+                setTimeout(() => player.play(), 1000);
+            });
+            
             videoIdx = (videoIdx + 1) % SOCIAL_CONFIG.videos.length;
         }
+
+        // Evento para quando o vídeo termina
         player.onended = playNextVideo;
+
+        // Caso o vídeo trave ou não carregue, tenta o próximo após um tempo
+        player.onerror = () => {
+            console.error("Erro no carregamento do vídeo, pulando para o próximo...");
+            setTimeout(playNextVideo, 2000);
+        };
 
         function updateContent() {
             let html = '';
-            
+            const config = (typeof SOCIAL_CONFIG !== 'undefined') ? SOCIAL_CONFIG : { tempoSlideAvaliacao: 10000 };
+
             if (slideIdx === 0) {
-                // MODO REVIEWS (Legítimos do Google)
-                const reviews = SOCIAL_CONFIG.avaliacoes
-                    .filter(a => a.estrelas >= 4)
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 3);
+                const reviewsBase = (typeof GOOGLE_REVIEWS_DATA !== 'undefined') ? GOOGLE_REVIEWS_DATA : [];
+                const shuffled = [...reviewsBase].sort(() => 0.5 - Math.random());
+                const selection = shuffled.slice(0, 3);
 
-                html = `<div class="space-y-4">`;
-                reviews.forEach((r, i) => {
+                html = `
+                    <div class="fade-in">
+                        <div class="flex items-center gap-3 mb-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-8">
+                            <h2 class="text-2xl font-black text-gray-700 uppercase tracking-tight">O que dizem sobre nós</h2>
+                        </div>
+                        <div class="flex flex-col">
+                `;
+
+                selection.forEach((rev, i) => {
                     let stars = '';
-                    for(let j=0; j<5; j++) stars += `<i class="fas fa-star ${j < r.estrelas ? 'text-yellow-400' : 'text-gray-200'} text-[10px]"></i>`;
+                    for(let j=0; j<5; j++) {
+                        stars += `<i class="fas fa-star ${j < rev.estrelas ? 'text-yellow-400' : 'text-gray-200'} text-xs"></i>`;
+                    }
+                    const avatar = rev.foto_perfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(rev.nome)}&background=random&color=fff&size=100`;
                     
-                    // Fallback para avatar caso não tenha imagem
-                    const avatarUrl = r.foto_perfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.nome)}&background=random`;
-
                     html += `
-                        <div class="review-widget-card" style="animation-delay: ${i * 0.2}s">
-                            <div class="flex items-center gap-4 mb-3">
-                                <img src="${avatarUrl}" class="avatar" alt="User">
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-bold text-gray-800 text-sm">${r.nome}</span>
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="12">
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex">${stars}</div>
-                                        <span class="text-[10px] text-gray-400 font-bold uppercase">Postado recentemente</span>
-                                    </div>
+                        <div class="review-card" style="animation-delay: ${i * 0.15}s">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-3">
+                                    <img src="${avatar}" class="w-8 h-8 rounded-full border border-gray-100 shadow-sm">
+                                    <span class="font-bold text-gray-800 uppercase text-sm">${rev.nome}</span>
                                 </div>
+                                <div class="flex gap-0.5">${stars}</div>
                             </div>
-                            <p class="text-gray-600 text-lg leading-snug">"${r.texto}"</p>
+                            <p class="text-gray-600 italic text-lg leading-tight text-truncate-2">"${rev.texto}"</p>
                         </div>
                     `;
                 });
-                html += `</div>`;
-            } else {
-                // MODO QR CODE GRANDE (Alterna entre Insta e Google)
-                const isInsta = slideIdx === 1;
-                const qrLink = isInsta ? SOCIAL_CONFIG.instagram.link : SOCIAL_CONFIG.googleReviewLink;
-                const title = isInsta ? "Siga nosso perfil!" : "Deixe sua nota!";
-                const sub = isInsta ? "Poste um Story e marque a gente para ganhar visibilidade." : "Sua avaliação nos ajuda a crescer e melhorar nosso serviço.";
-                const icon = isInsta ? "fab fa-instagram bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600" : "fab fa-google bg-blue-500";
-                
+
+                html += `</div></div>`;
+            } 
+            else if (slideIdx === 1) {
+                const link = (typeof SOCIAL_CONFIG !== 'undefined') ? SOCIAL_CONFIG.instagram.link : "#";
                 html = `
                     <div class="fade-in flex flex-col items-center text-center">
-                        <div class="${icon} w-20 h-20 rounded-3xl text-white flex items-center justify-center text-4xl mb-6 shadow-lg"></div>
-                        <h2 class="text-5xl font-display font-bold text-gray-800 mb-4">${title}</h2>
-                        <p class="text-xl text-gray-500 max-w-md mb-8 leading-relaxed">${sub}</p>
-                        <div class="bg-white p-6 rounded-[40px] shadow-xl border-4 border-gray-50">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrLink)}" class="w-64 h-64">
+                        <div class="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center text-3xl mb-4">
+                            <i class="fab fa-instagram"></i>
                         </div>
-                        <p class="mt-4 text-xs font-black text-gray-300 uppercase tracking-widest">Aponte sua câmera para o QRCode</p>
+                        <h2 class="text-4xl font-display font-bold text-gray-800 mb-2">Apareça no nosso feed!</h2>
+                        <p class="text-xl text-gray-500 mb-6 max-w-md mx-auto leading-tight">
+                            Poste sua foto, <b>marque a gente</b> nos Stories e siga nosso perfil para novidades!
+                        </p>
+                        <div class="qr-frame">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(link)}" class="w-48 h-48">
+                        </div>
+                        <p class="mt-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">Escaneie para seguir</p>
+                    </div>
+                `;
+            } 
+            else {
+                const link = (typeof SOCIAL_CONFIG !== 'undefined') ? SOCIAL_CONFIG.googleReviewLink : "#";
+                html = `
+                    <div class="fade-in flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center text-3xl mb-4">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <h2 class="text-4xl font-display font-bold text-gray-800 mb-2">Sua opinião vale muito!</h2>
+                        <p class="text-xl text-gray-500 mb-6 max-w-md mx-auto leading-tight">
+                            Amou o sabor? <b>Escaneie o código</b> e nos dê 5 estrelas! Sua avaliação nos faz crescer.
+                        </p>
+                        <div class="qr-frame">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(link)}" class="w-48 h-48">
+                        </div>
+                        <p class="mt-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">Escaneie para avaliar</p>
                     </div>
                 `;
             }
 
             dynamicArea.innerHTML = html;
-            
-            // Barra de Progresso
-            progressBar.style.transition = 'none';
-            progressBar.style.width = '0%';
+
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
             setTimeout(() => {
-                progressBar.style.transition = `width ${SOCIAL_CONFIG.tempoSlideAvaliacao}ms linear`;
-                progressBar.style.width = '100%';
+                progressFill.style.transition = `width ${config.tempoSlideAvaliacao}ms linear`;
+                progressFill.style.width = '100%';
             }, 50);
 
             slideIdx = (slideIdx + 1) % 3;
