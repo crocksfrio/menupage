@@ -73,6 +73,17 @@
     }
     .nav-ifood:active { transform:scale(.96); }
     @media(hover:hover){ .nav-ifood:hover{background:var(--orange-dk);} }
+    .nav-99 {
+      display:flex; align-items:center; gap:6px;
+      background:#f8d000; color:#1a1a1a;
+      font-size:.78rem; font-weight:800;
+      padding:8px 14px; border-radius:99px;
+      box-shadow:0 4px 14px rgba(248,208,0,.35); transition:background .2s, transform .2s;
+    }
+    .nav-99:active { transform:scale(.96); }
+    @media(hover:hover){ .nav-99:hover{background:#e0bb00;} }
+    /* Esconde o 99 no nav em telas muito pequenas pra não apertar */
+    @media(max-width:380px){ .nav-99{ display:none; } }
     .hamburger {
       display:flex; flex-direction:column; gap:5px;
       background:none; border:none; padding:6px; border-radius:8px; cursor:pointer;
@@ -436,7 +447,7 @@
     .mob-whats { background:var(--teal-lt); color:var(--teal-dk); }
 
     /* NAV LOGO IMG */
-    .nav-logo-img { height:38px; width:auto; display:block; }
+    .nav-logo-img { height:52px; width:auto; display:block; }
 
     /* 99FOOD button */
     .btn-99 {
@@ -471,6 +482,7 @@
     <img src="assets/logo_retangular_transparente.png" alt="Crocks Frio" class="nav-logo-img" />
   </a>
   <div class="nav-right">
+    <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" class="nav-99">🟡 99Food</a>
     <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
        target="_blank" class="nav-ifood">🛵 iFood</a>
     <button class="hamburger" id="ham" aria-label="Menu">
