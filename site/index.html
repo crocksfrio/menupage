@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crocks Frio | Sorvetes Artesanais & Café · Recife</title>
+  <meta name="description" content="Há mais de 14 anos criando sorvetes artesanais com ingredientes naturais, muito sabor e qualidade. Venha viver essa experiência única em Recife!">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:   #FDF8F2;
+      --warm:    #e0f5f4;
+      --teal:    #00a397;
+      --teal-dk: #007d74;
+      --orange:  #fc9c21;
+      --sand:    #e4b997;
+      --caramel: #af743f;
+      --gold:    #e2b971;
+      --dark:    #0a2421;
+      --brown:   #3b2008;
+      --white:   #FFFEF9;
+
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'Jost', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--orange);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform .15s ease, width .3s ease, height .3s ease, background .3s ease;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--teal);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all .4s cubic-bezier(.165,.84,.44,1);
+      opacity: .6;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: .025;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
+      padding: 1.2rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .4s ease, padding .4s ease, backdrop-filter .4s ease;
+    }
+    nav.scrolled {
+      background: rgba(253, 246, 238, 0.88);
+      backdrop-filter: blur(16px);
+      padding: .8rem 3rem;
+      border-bottom: 1px solid rgba(0,163,151,.15);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      color: var(--dark);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: .82rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--dark);
+      text-decoration: none;
+      opacity: .7;
+      transition: opacity .3s, color .3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--teal);
+      transition: width .35s ease;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--teal); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: var(--orange);
+      color: var(--white) !important;
+      opacity: 1 !important;
+      padding: .55rem 1.4rem;
+      border-radius: 2px;
+      font-weight: 500;
+      letter-spacing: .1em !important;
+      transition: background .3s, transform .3s !important;
+    }
+    .nav-cta:hover { background: var(--dark) !important; transform: translateY(-1px); }
+    .nav-cta::after { display: none !important; }
+
+    /* Mobile menu */
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 1.5px; background: var(--dark); transition: all .3s; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    /* Decorative circles */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-blob-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(252,156,33,.18) 0%, transparent 70%);
+      top: -80px; right: -100px;
+      animation: drift1 12s ease-in-out infinite;
+    }
+    .hero-blob-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,163,151,.16) 0%, transparent 70%);
+      bottom: 0; left: -80px;
+      animation: drift2 10s ease-in-out infinite;
+    }
+    .hero-blob-3 {
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(0,163,151,.14) 0%, transparent 70%);
+      top: 40%; left: 40%;
+      animation: drift3 14s ease-in-out infinite;
+    }
+
+    @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,25px) scale(1.05)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-30px) scale(1.08)} }
+    @keyframes drift3 { 0%,100%{transform:translate(0,0)} 33%{transform:translate(15px,-20px)} 66%{transform:translate(-20px,10px)} }
+
+    /* Decorative lines */
+    .hero-line {
+      position: absolute;
+      border: 1px solid rgba(0,163,151,.14);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-line-1 { width: 700px; height: 700px; top: 50%; right: -200px; transform: translateY(-50%); }
+    .hero-line-2 { width: 500px; height: 500px; top: 50%; right: -100px; transform: translateY(-50%); }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 900px;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: .72rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .8s .3s forwards;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: '—';
+      margin: 0 .8rem;
+      opacity: .5;
+    }
+
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -.01em;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp .9s .5s forwards;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(10,36,33,.65);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .9s .75s forwards;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .9s .95s forwards;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--white);
+      padding: .9rem 2.4rem;
+      border: none; border-radius: 2px;
+      font-family: var(--sans);
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+      transition: background .3s, transform .3s, box-shadow .3s;
+      box-shadow: 0 4px 20px rgba(252,156,33,.3);
+    }
+    .btn-primary:hover {
+      background: var(--teal);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,163,151,.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--dark);
+      padding: .9rem 2.4rem;
+      border: 1.5px solid rgba(0,163,151,.35);
+      border-radius: 2px;
+      font-family: var(--sans);
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+      transition: border-color .3s, color .3s, transform .3s;
+    }
+    .btn-outline:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .6rem;
+      opacity: 0; animation: fadeUp .8s 1.4s forwards;
+    }
+    .scroll-hint span {
+      font-size: .67rem; letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(10,36,33,.4);
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--teal), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── MARQUEE STRIP ─── */
+    .marquee-strip {
+      background: var(--teal);
+      padding: 1rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .marquee-track {
+      display: flex; align-items: center;
+      animation: marquee 18s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: rgba(255,254,249,.85);
+      padding: 0 2rem;
+      flex-shrink: 0;
+    }
+    .marquee-dot {
+      color: rgba(255,254,249,.4);
+      font-size: .6rem;
+      padding: 0 .5rem;
+    }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 7rem 3rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ─── LABEL ─── */
+    .section-label {
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--dark);
+    }
+    .section-title em { font-style: italic; color: var(--orange); }
+
+    /* ─── PRODUCTS GRID ─── */
+    #produtos {
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    #produtos::before {
+      content: '60+';
+      position: absolute;
+      font-family: var(--serif);
+      font-size: 28vw;
+      font-weight: 600;
+      color: rgba(0,163,151,.06);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .produtos-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+    .produtos-header .section-title { margin-bottom: 1rem; }
+    .produtos-header p {
+      color: rgba(10,36,33,.6);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5px;
+    }
+
+    .produto-card {
+      background: var(--cream);
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .35s ease;
+      cursor: none;
+    }
+    .produto-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s ease;
+    }
+    .produto-card:nth-child(even)::after { background: var(--teal); }
+    .produto-card:hover { background: var(--warm); }
+    .produto-card:hover::after { transform: scaleX(1); }
+
+    .produto-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    .produto-card:hover .produto-icon { transform: scale(1.15) rotate(-5deg); }
+
+    .produto-card h3 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: .8rem;
+      color: var(--dark);
+    }
+    .produto-card p {
+      font-size: .9rem;
+      line-height: 1.8;
+      color: rgba(10,36,33,.6);
+    }
+
+    /* ─── ABOUT ─── */
+    #sobre {
+      background: var(--cream);
+    }
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .sobre-img-wrapper {
+      position: relative;
+    }
+    .sobre-img-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: -20px;
+      right: 20px; bottom: 20px;
+      border: 1.5px solid rgba(0,163,151,.3);
+      border-radius: 2px;
+      z-index: 0;
+      transition: transform .4s ease;
+    }
+    .sobre-img-wrapper:hover::before {
+      transform: translate(8px, 8px);
+    }
+    .sobre-img-main {
+      width: 100%; aspect-ratio: 4/5;
+      object-fit: cover;
+      border-radius: 2px;
+      position: relative; z-index: 1;
+      filter: saturate(.9);
+      transition: filter .4s;
+    }
+    .sobre-img-wrapper:hover .sobre-img-main { filter: saturate(1); }
+
+    .sobre-badge {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      z-index: 2;
+      background: var(--orange);
+      color: var(--white);
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      animation: rotateSlow 20s linear infinite;
+    }
+    .sobre-badge strong {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .sobre-badge span {
+      font-size: .6rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+    @keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    .sobre-content .section-label { margin-bottom: .8rem; }
+    .sobre-content .section-title { margin-bottom: 2rem; }
+    .sobre-content p {
+      font-size: 1rem;
+      line-height: 2;
+      color: rgba(10,36,33,.7);
+      margin-bottom: 1.5rem;
+    }
+    .sobre-stats {
+      display: flex; gap: 3rem;
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(0,163,151,.25);
+    }
+    .stat strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--orange);
+      line-height: 1;
+    }
+    .stat span {
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(10,36,33,.5);
+    }
+
+    /* ─── GALLERY / INSTAGRAM ─── */
+    #galeria {
+      background: var(--dark);
+      padding: 7rem 0;
+    }
+    #galeria .container { padding: 0 3rem; }
+    #galeria .section-label { color: rgba(0,163,151,.7); }
+    #galeria .section-title { color: var(--cream); margin-bottom: .8rem; }
+    #galeria .section-title em { color: var(--orange); }
+    .galeria-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .galeria-header p { color: rgba(253,248,242,.5); font-size: .9rem; max-width: 320px; line-height: 1.8; }
+    .galeria-header a {
+      color: var(--orange);
+      text-decoration: none;
+      font-size: .78rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(252,156,33,.4);
+      padding-bottom: 2px;
+      transition: border-color .3s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .galeria-header a:hover { border-color: var(--orange); }
+
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .galeria-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      cursor: none;
+    }
+    .galeria-item:first-child {
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+    .galeria-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94), filter .6s;
+      filter: saturate(.8);
+    }
+    .galeria-item:hover img {
+      transform: scale(1.06);
+      filter: saturate(1.1);
+    }
+    .galeria-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,36,33,.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity .4s;
+      display: flex; align-items: flex-end;
+      padding: 1.2rem;
+    }
+    .galeria-item:hover .galeria-overlay { opacity: 1; }
+    .galeria-overlay span {
+      color: var(--white);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* ─── LOCATION ─── */
+    #localizacao {
+      background: #e8f7f6;
+    }
+    .loc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .loc-content .section-title { margin-bottom: 2rem; }
+    .loc-info { list-style: none; }
+    .loc-info li {
+      display: flex; gap: 1rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid rgba(0,163,151,.18);
+      align-items: flex-start;
+    }
+    .loc-info li:last-child { border-bottom: none; }
+    .loc-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .loc-info strong {
+      display: block;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: .3rem;
+    }
+    .loc-info span, .loc-info a {
+      font-size: .95rem;
+      color: rgba(10,36,33,.75);
+      text-decoration: none;
+      line-height: 1.6;
+      display: block;
+    }
+    .loc-info a:hover { color: var(--orange); }
+
+    .loc-map-wrap {
+      position: relative;
+    }
+    .loc-map-wrap::before {
+      content: '';
+      position: absolute;
+      top: 16px; left: 16px; right: -16px; bottom: -16px;
+      background: rgba(0,163,151,.15);
+      border-radius: 4px;
+      z-index: 0;
+    }
+    .loc-map-wrap iframe {
+      width: 100%; height: 420px;
+      border: none; border-radius: 4px;
+      position: relative; z-index: 1;
+      filter: saturate(.9) contrast(1.05);
+    }
+
+    /* ─── CONTACT STRIP ─── */
+    .contact-strip {
+      background: var(--orange);
+      padding: 5rem 3rem;
+      text-align: center;
+    }
+    .contact-strip .section-label { color: rgba(255,252,248,.6); }
+    .contact-strip h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+    .contact-strip p {
+      color: rgba(255,252,248,.75);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+      max-width: 440px;
+      margin-left: auto; margin-right: auto;
+      line-height: 1.8;
+    }
+    .contact-buttons {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .btn-white {
+      background: var(--white);
+      color: var(--orange);
+      padding: .9rem 2.2rem;
+      border-radius: 2px;
+      font-family: var(--sans);
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+      transition: transform .3s, box-shadow .3s;
+      display: inline-flex; align-items: center; gap: .6rem;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(10,36,33,.2); }
+    .btn-dark-outline {
+      background: transparent;
+      color: var(--white);
+      padding: .9rem 2.2rem;
+      border: 1.5px solid rgba(255,252,248,.45);
+      border-radius: 2px;
+      font-family: var(--sans);
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+      transition: border-color .3s, background .3s, transform .3s;
+      display: inline-flex; align-items: center; gap: .6rem;
+    }
+    .btn-dark-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,252,248,.1);
+      transform: translateY(-2px);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      padding: 4rem 3rem 2.5rem;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(0,163,151,.12);
+      margin-bottom: 2rem;
+    }
+    .footer-brand .nav-logo {
+      display: block;
+      color: var(--cream);
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .footer-brand p {
+      font-size: .88rem;
+      line-height: 1.8;
+      color: rgba(253,248,242,.45);
+      max-width: 260px;
+    }
+    .footer-social {
+      display: flex; gap: .8rem; margin-top: 1.8rem;
+    }
+    .social-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(253,248,242,.15);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(253,248,242,.5);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: border-color .3s, color .3s, background .3s;
+      cursor: none;
+    }
+    .social-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: rgba(0,163,151,.1);
+    }
+    .footer-col h4 {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(253,248,242,.35);
+      margin-bottom: 1.4rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: .7rem; }
+    .footer-col ul a {
+      color: rgba(253,248,242,.55);
+      text-decoration: none;
+      font-size: .9rem;
+      transition: color .3s;
+      cursor: none;
+    }
+    .footer-col ul a:hover { color: var(--teal); }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p {
+      font-size: .78rem;
+      color: rgba(253,248,242,.25);
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav.scrolled { padding: .8rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: fixed; inset: 0;
+        background: var(--cream);
+        align-items: center; justify-content: center;
+        gap: 2.5rem;
+        z-index: 499;
+      }
+      .nav-links.open a { font-size: 1.2rem; }
+      section { padding: 5rem 1.5rem; }
+      .sobre-grid, .loc-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+      .galeria-item:first-child { grid-row: auto; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-h1 { font-size: clamp(3rem, 14vw, 5rem); }
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ─── NAV ─── -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Crocks<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#produtos">Sabores</a></li>
+      <li><a href="#galeria">Galeria</a></li>
+      <li><a href="#localizacao">Localização</a></li>
+      <li>
+        <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
+           target="_blank" class="nav-cta">Pedir agora</a>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section id="hero">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+    <div class="hero-line hero-line-1"></div>
+    <div class="hero-line hero-line-2"></div>
+
+    <div class="hero-inner">
+      <span class="hero-tag">Recife · Desde 2010</span>
+      <h1 class="hero-h1">O sorvete<br><em>perfeito</em><br>espera por você</h1>
+      <p class="hero-sub">Sorvetes artesanais feitos com ingredientes naturais. Mais de 60 sabores para você se deliciar em Recife.</p>
+      <div class="hero-actions">
+        <a href="#produtos" class="btn-primary">Ver sabores</a>
+        <a href="#localizacao" class="btn-outline">Como chegar</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Role</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ─── MARQUEE ─── -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <!-- duplicated for seamless loop -->
+      <span class="marquee-item">Sorvetes Artesanais</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">60+ Sabores</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Picolé Pet</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Café Especial</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Doces & Salgados</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Recife, Pernambuco</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">14 Anos de Sabor</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Sorvetes Artesanais</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">60+ Sabores</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Picolé Pet</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Café Especial</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Doces & Salgados</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">Recife, Pernambuco</span><span class="marquee-dot">●</span>
+      <span class="marquee-item">14 Anos de Sabor</span><span class="marquee-dot">●</span>
+    </div>
+  </div>
+
+  <!-- ─── PRODUTOS ─── -->
+  <section id="produtos">
+    <div class="container">
+      <div class="produtos-header reveal">
+        <span class="section-label">O que oferecemos</span>
+        <h2 class="section-title">Tudo com <em>muito sabor</em></h2>
+        <p>Uma experiência completa para toda a família — e até para o seu pet!</p>
+      </div>
+      <div class="produtos-grid">
+        <div class="produto-card reveal reveal-delay-1">
+          <span class="produto-icon">🍦</span>
+          <h3>Mais de 60 Sabores</h3>
+          <p>Sorvetes artesanais cremosos feitos com ingredientes naturais selecionados. Um universo de sabores para cada momento.</p>
+        </div>
+        <div class="produto-card reveal reveal-delay-2">
+          <span class="produto-icon">🍡</span>
+          <h3>Picolé Crocks</h3>
+          <p>Refrescante, saboroso e perfeito para qualquer momento. Experimente nossos deliciosos picolés artesanais.</p>
+        </div>
+        <div class="produto-card reveal reveal-delay-3">
+          <span class="produto-icon">🐾</span>
+          <h3>Picolé para seu Pet</h3>
+          <p>Refrescância e sabor feitos especialmente para seu melhor amigo. Porque eles também merecem!</p>
+        </div>
+        <div class="produto-card reveal reveal-delay-4">
+          <span class="produto-icon">☕</span>
+          <h3>Café, Doces & Salgados</h3>
+          <p>Cafés de grãos especiais, tortas irresistíveis e salgados saborosos para acompanhar seu sorvete favorito.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SOBRE ─── -->
+  <section id="sobre">
+    <div class="container">
+      <div class="sobre-grid">
+        <div class="sobre-img-wrapper reveal">
+          <img
+            src="https://static.wixstatic.com/media/514c2f_8932e0cd5d7547b2be76f303dd3bebd1~mv2.jpeg/v1/fill/w_969,h_759,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202025-03-16%20at%2020_09_29.jpeg"
+            alt="Sorvete Artesanal Crocks Frio"
+            class="sobre-img-main"
+          />
+          <div class="sobre-badge">
+            <strong>14</strong>
+            <span>anos de<br>sabor</span>
+          </div>
+        </div>
+        <div class="sobre-content reveal reveal-delay-2">
+          <span class="section-label">Nossa história</span>
+          <h2 class="section-title">O verdadeiro sabor <em>artesanal</em></h2>
+          <p>Há mais de 14 anos, a Crocks Frio cria sorvetes artesanais com ingredientes naturais, muito sabor e qualidade. Cada colherada é feita com carinho e dedicação para trazer o melhor para você e sua família.</p>
+          <p>Localizada no coração de Recife, somos muito mais que uma sorveteria. Somos um espaço de encontro, de alegria e de sabores únicos que ficam na memória.</p>
+          <div class="sobre-stats">
+            <div class="stat">
+              <strong>60+</strong>
+              <span>Sabores</span>
+            </div>
+            <div class="stat">
+              <strong>14</strong>
+              <span>Anos</span>
+            </div>
+            <div class="stat">
+              <strong>★ 4.9</strong>
+              <span>Avaliação</span>
+            </div>
+          </div>
+          <br><br>
+          <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" class="btn-primary">Ver no Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── GALERIA ─── -->
+  <section id="galeria">
+    <div class="container">
+      <div class="galeria-header reveal">
+        <div>
+          <span class="section-label">@crocksfrio.oficial</span>
+          <h2 class="section-title">Siga a <em>gente!</em></h2>
+          <p>Acompanhe nossas novidades e delícias no Instagram.</p>
+        </div>
+        <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank">Ver perfil completo →</a>
+      </div>
+      <div class="galeria-grid reveal">
+        <div class="galeria-item">
+          <img src="https://static.wixstatic.com/media/514c2f_ec6b620c68344b1c8d35890efac7cf54f000.jpg/v1/fill/w_480,h_628,al_c,q_80,enc_avif,quality_auto/514c2f_ec6b620c68344b1c8d35890efac7cf54f000.jpg" alt="Sorvete Crocks" loading="lazy" />
+          <div class="galeria-overlay"><span>Ver no Instagram</span></div>
+        </div>
+        <div class="galeria-item">
+          <img src="https://static.wixstatic.com/media/514c2f_edbf2876271e40548dba10b80770d07c~mv2.jpeg/v1/crop/x_0,y_176,w_2774,h_3809/fill/w_327,h_449,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202025-03-16%20at%2020_09_33.jpeg" alt="Torta de Cheesecake" loading="lazy" />
+          <div class="galeria-overlay"><span>Torta Cheesecake</span></div>
+        </div>
+        <div class="galeria-item">
+          <img src="https://static.wixstatic.com/media/514c2f_73e87cb2d0724c66bfc2d2db24927359~mv2.jpeg/v1/crop/x_0,y_82,w_2538,h_3485/fill/w_327,h_449,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202025-03-16%20at%2020_09_31%20(1).jpeg" alt="Donuts de Doce de Leite" loading="lazy" />
+          <div class="galeria-overlay"><span>Donuts de Doce de Leite</span></div>
+        </div>
+        <div class="galeria-item">
+          <img src="https://static.wixstatic.com/media/514c2f_ee6d943738f547768526075c3593848a~mv2.png/v1/crop/x_4,y_0,w_451,h_619/fill/w_327,h_449,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Captura%20de%20tela%202025-02-25%20103834.png" alt="Sorvete de Açaí" loading="lazy" />
+          <div class="galeria-overlay"><span>Sorvete de Açaí</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LOCALIZAÇÃO ─── -->
+  <section id="localizacao">
+    <div class="container">
+      <div class="loc-grid">
+        <div class="loc-content reveal">
+          <span class="section-label">Visite-nos</span>
+          <h2 class="section-title">Estamos <em>pertinho</em><br>de você</h2>
+          <br>
+          <ul class="loc-info">
+            <li>
+              <span class="loc-icon">📍</span>
+              <div>
+                <strong>Endereço</strong>
+                <a href="https://maps.google.com/?q=Rua+Demócrito+de+Souza+Filho+271+Recife" target="_blank">
+                  Rua Demócrito de Souza Filho, 271<br>Madalena, Recife — PE, 50610-120
+                </a>
+              </div>
+            </li>
+            <li>
+              <span class="loc-icon">📞</span>
+              <div>
+                <strong>Telefone / WhatsApp</strong>
+                <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29" target="_blank">
+                  (81) 99514-0539
+                </a>
+              </div>
+            </li>
+            <li>
+              <span class="loc-icon">🛵</span>
+              <div>
+                <strong>Delivery</strong>
+                <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share" target="_blank">
+                  Disponível no iFood
+                </a>
+              </div>
+            </li>
+            <li>
+              <span class="loc-icon">📸</span>
+              <div>
+                <strong>Instagram</strong>
+                <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank">
+                  @crocksfrio.oficial
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="loc-map-wrap reveal reveal-delay-2">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.4!2d-34.9039!3d-8.0588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab18ff8b0b0b0b%3A0x0!2sRua+Dem%C3%B3crito+de+Souza+Filho%2C+271%2C+Recife%2C+PE!5e0!3m2!1spt-BR!2sbr!4v1234567890"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Crocks Frio no mapa">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA STRIP ─── -->
+  <div class="contact-strip">
+    <div class="container">
+      <span class="section-label">Peça agora</span>
+      <h2>Venha se refrescar<br>e se <em style="font-style:italic">deliciar!</em></h2>
+      <p>Faça seu pedido pelo iFood, fale com a gente no WhatsApp ou venha nos visitar em Recife.</p>
+      <div class="contact-buttons">
+        <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share" target="_blank" class="btn-white">
+          🛵 Pedir pelo iFood
+        </a>
+        <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29" target="_blank" class="btn-dark-outline">
+          💬 WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">Crocks<span style="color:var(--orange)">.</span></a>
+        <p>Sorvetes artesanais feitos com amor há mais de 14 anos. Venha nos visitar em Recife!</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" class="social-btn" aria-label="Instagram">𝕀</a>
+          <a href="https://api.whatsapp.com/send/?phone=558195140539" target="_blank" class="social-btn" aria-label="WhatsApp">W</a>
+          <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77" target="_blank" class="social-btn" aria-label="iFood">F</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#sobre">Sobre a Crocks</a></li>
+          <li><a href="#produtos">Nossos Produtos</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+          <li><a href="#localizacao">Localização</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="tel:+558195140539">(81) 99514-0539</a></li>
+          <li><a href="https://api.whatsapp.com/send/?phone=558195140539" target="_blank">WhatsApp</a></li>
+          <li><a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank">@crocksfrio.oficial</a></li>
+          <li><a href="#">CNPJ: 49.906.143/0001-56</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Crocks Frio Sorveteria. Todos os direitos reservados.</p>
+      <p>Rua Demócrito de Souza Filho, 271 · Recife, PE</p>
+    </div>
+  </footer>
+
+  <!-- ─── JS ─── -->
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * .12;
+      ry += (my - ry) * .12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .produto-card, .galeria-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '20px';
+        cursor.style.height = '20px';
+        ring.style.width = '56px';
+        ring.style.height = '56px';
+        ring.style.borderColor = 'var(--orange)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '12px';
+        cursor.style.height = '12px';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+        ring.style.borderColor = 'var(--teal)';
+      });
+    });
+
+    // Sticky nav
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      const spans = hamburger.querySelectorAll('span');
+      if (navLinks.classList.contains('open')) {
+        spans[0].style.transform = 'translateY(6.5px) rotate(45deg)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'translateY(-6.5px) rotate(-45deg)';
+      } else {
+        spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+      }
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        hamburger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+      });
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
