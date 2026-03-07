@@ -177,14 +177,14 @@
     <div id="sync-status"></div>
 
     <script>
-        // ─── Estado global ───────────────────────────────────────────────
-        let videoIdx   = 0;
-        let slideIdx   = 0;
-        let liveReviews = [];          // Reviews vindos da API (atualiza a cada hora)
+        // ─── Estado global ────────────────────────────────────────────────
+        let videoIdx    = 0;
+        let slideIdx    = 0;
+        let liveReviews = [];
 
-        const player      = document.getElementById('player');
-        const preloader   = document.getElementById('preloader');
-        const dynamicArea = document.getElementById('dynamic-area');
+        const player       = document.getElementById('player');
+        const preloader    = document.getElementById('preloader');
+        const dynamicArea  = document.getElementById('dynamic-area');
         const progressFill = document.getElementById('progress-fill');
         const syncStatus   = document.getElementById('sync-status');
 
@@ -192,30 +192,70 @@
             ? SOCIAL_CONFIG
             : { tempoSlideAvaliacao: 10000, instagram: { handle: '@crocksfrio.oficial', link: '#' }, googleReviewLink: '#', videos: [] };
 
-        // ─── Sincronização com a API do Vercel ───────────────────────────
-        /**
-         * Busca reviews frescos em /api/sync-reviews.
-         * O Vercel serve do cache por 1h (s-maxage=3600), então
-         * chamadas frequentes NÃO consomem cota da Google Maps API.
-         * Aqui recarregamos a cada 1h para pegar a versão mais recente.
-         */
+        // ─── Cache genérico de blobs (vídeos + imagens) ───────────────────
+        // Qualquer URL — vídeo, QR code, avatar — é baixada uma única vez
+        // e convertida em Blob URL local. Requisições subsequentes usam
+        // o objeto em memória, sem tráfego de rede.
+        const blobCache = {};  // url original → blob URL
+
+        async function cacheBlob(url) {
+            if (!url || blobCache[url]) return;   // já cacheada ou vazia
+            try {
+                const res  = await fetch(url);
+                const blob = await res.blob();
+                blobCache[url] = URL.createObjectURL(blob);
+            } catch (e) {
+                console.warn(`Cache falhou para: ${url}`, e);
+                blobCache[url] = url;              // fallback: URL original
+            }
+        }
+
+        // Retorna o blob local se disponível, senão a URL original
+        function b(url) {
+            return (url && blobCache[url]) ? blobCache[url] : url;
+        }
+
+        // ─── QR Codes ─────────────────────────────────────────────────────
+        function qrUrl(link) {
+            return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(link)}`;
+        }
+
+        async function preloadQRCodes() {
+            const instaLink  = config.instagram?.link   || '#';
+            const googleLink = config.googleReviewLink  || '#';
+            await Promise.all([
+                cacheBlob(qrUrl(instaLink)),
+                cacheBlob(qrUrl(googleLink)),
+            ]);
+            console.log('QR Codes cacheados.');
+        }
+
+        // ─── Reviews ──────────────────────────────────────────────────────
         async function fetchReviews() {
             try {
-                const res = await fetch('/api/sync-reviews');
+                const res  = await fetch('/api/sync-reviews');
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
 
                 if (Array.isArray(data) && data.length > 0) {
                     liveReviews = data;
+
+                    // Cacheia avatares imediatamente após receber os reviews.
+                    // Usa ui-avatars como fallback para quem não tem foto.
+                    const avatarUrls = data.map(rev =>
+                        rev.foto_perfil
+                        || `https://ui-avatars.com/api/?name=${encodeURIComponent(rev.nome)}&background=random&color=fff&size=100`
+                    );
+                    await Promise.all(avatarUrls.map(cacheBlob));
+                    console.log(`${data.length} avatares cacheados.`);
+
                     showSyncStatus('✓ Reviews atualizados', 'ok');
                 } else {
-                    // API respondeu mas sem reviews (ex: nenhum com 5 estrelas ainda)
                     showSyncStatus('Nenhum review 5★ encontrado', 'err');
                 }
             } catch (err) {
                 console.warn('Erro ao buscar reviews:', err);
                 showSyncStatus('Offline — usando cache local', 'err');
-                // liveReviews mantém o valor anterior (sem quebrar o display)
             }
         }
 
@@ -225,38 +265,16 @@
             setTimeout(() => { syncStatus.className = ''; }, 4000);
         }
 
-        // ─── Vídeos (cache em memória via Blob URL) ───────────────────────
-        // Cada vídeo é baixado UMA única vez e fica armazenado como Blob URL.
-        // Nas reproduções seguintes o navegador usa o objeto em memória,
-        // sem nenhuma requisição de rede adicional.
-        const videoCache = {};   // url original → blob URL
-
+        // ─── Vídeos ───────────────────────────────────────────────────────
         async function preloadAllVideos() {
             if (!config.videos || config.videos.length === 0) return;
-            await Promise.all(config.videos.map(url => cacheVideo(url)));
-        }
-
-        async function cacheVideo(url) {
-            if (videoCache[url]) return;           // já baixado
-            try {
-                const res  = await fetch(url);
-                const blob = await res.blob();
-                videoCache[url] = URL.createObjectURL(blob);
-                console.log(`Vídeo cacheado: ${url}`);
-            } catch (e) {
-                console.warn(`Falha ao cachear vídeo ${url}:`, e);
-                videoCache[url] = url;             // fallback: usa URL original
-            }
-        }
-
-        function blobOrFallback(url) {
-            return videoCache[url] || url;
+            await Promise.all(config.videos.map(cacheBlob));
+            console.log('Todos os vídeos cacheados.');
         }
 
         function playNextVideo() {
             if (!config.videos || config.videos.length === 0) return;
-            const currentUrl = config.videos[videoIdx];
-            player.src = blobOrFallback(currentUrl);
+            player.src = b(config.videos[videoIdx]);
             player.play().catch(e => console.log('Erro Play:', e));
             videoIdx = (videoIdx + 1) % config.videos.length;
         }
@@ -269,8 +287,7 @@
 
             if (slideIdx === 0) {
                 // Reviews Google
-                const pool     = liveReviews.length > 0 ? liveReviews : [];
-                const shuffled = [...pool].sort(() => 0.5 - Math.random());
+                const shuffled  = [...liveReviews].sort(() => 0.5 - Math.random());
                 const selection = shuffled.slice(0, 3);
 
                 html = `
@@ -294,8 +311,10 @@
                         for (let j = 0; j < 5; j++) {
                             stars += `<i class="fas fa-star ${j < rev.estrelas ? 'text-yellow-400' : 'text-gray-200'} text-[1.8vh]"></i>`;
                         }
-                        const avatar = rev.foto_perfil
+                        // Usa o blob cacheado — sem requisição de rede
+                        const avatarOriginal = rev.foto_perfil
                             || `https://ui-avatars.com/api/?name=${encodeURIComponent(rev.nome)}&background=random&color=fff&size=100`;
+                        const avatar = b(avatarOriginal);
 
                         html += `
                             <div class="review-card" style="animation-delay: ${i * 0.15}s">
@@ -315,8 +334,8 @@
                 html += `</div></div>`;
 
             } else if (slideIdx === 1) {
-                // CTA Instagram
-                const link = config.instagram.link || '#';
+                // CTA Instagram — QR code já cacheado
+                const link = config.instagram?.link || '#';
                 html = `
                     <div class="fade-in flex flex-col items-center text-center">
                         <div class="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center text-4xl mb-3">
@@ -327,13 +346,13 @@
                             Poste sua foto, <b>marque a gente</b> nos Stories e siga nosso perfil para novidades!
                         </p>
                         <div class="qr-frame">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(link)}" class="w-[15vw] h-[15vw] max-w-[200px] max-h-[200px]">
+                            <img src="${b(qrUrl(link))}" class="w-[15vw] h-[15vw] max-w-[200px] max-h-[200px]">
                         </div>
                         <p class="mt-4 font-black text-gray-400 uppercase tracking-widest text-[1.2vh]">Escaneie para seguir</p>
                     </div>
                 `;
             } else {
-                // CTA Google Review
+                // CTA Google Review — QR code já cacheado
                 const link = config.googleReviewLink || '#';
                 html = `
                     <div class="fade-in flex flex-col items-center text-center">
@@ -345,7 +364,7 @@
                             Amou o sabor? <b>Escaneie o código</b> e nos dê 5 estrelas! Sua avaliação nos faz crescer.
                         </p>
                         <div class="qr-frame">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(link)}" class="w-[15vw] h-[15vw] max-w-[200px] max-h-[200px]">
+                            <img src="${b(qrUrl(link))}" class="w-[15vw] h-[15vw] max-w-[200px] max-h-[200px]">
                         </div>
                         <p class="mt-4 font-black text-gray-400 uppercase tracking-widest text-[1.2vh]">Escaneie para avaliar</p>
                     </div>
@@ -367,21 +386,22 @@
 
         // ─── Init ─────────────────────────────────────────────────────────
         async function init() {
-            // Preenche handle do Instagram
             document.getElementById('insta-handle').innerText = config.instagram.handle;
 
-            // Baixa todos os vídeos uma única vez e só então inicia a reprodução
-            await preloadAllVideos();
+            // Tudo em paralelo: vídeos + QR codes + reviews (com avatares)
+            // A página só começa a rodar depois que tudo está em memória
+            await Promise.all([
+                preloadAllVideos(),
+                preloadQRCodes(),
+                fetchReviews(),
+            ]);
+
             playNextVideo();
-
-            // Busca reviews agora e agenda recarga a cada 1h
-            // (sincronizado com o cache s-maxage=3600 do Vercel)
-            await fetchReviews();
-            setInterval(fetchReviews, 60 * 60 * 1000);  // 1 hora
-
-            // Inicia rotação de slides
             updateContent();
             setInterval(updateContent, config.tempoSlideAvaliacao);
+
+            // Recarrega reviews (e re-cacheia avatares novos) a cada 1h
+            setInterval(fetchReviews, 60 * 60 * 1000);
         }
 
         window.onload = init;
