@@ -74,7 +74,7 @@
     .nav-ifood:active { transform:scale(.96); }
     @media(hover:hover){ .nav-ifood:hover{background:var(--orange-dk);} }
     .nav-99 {
-      display:flex; align-items:center; gap:6px;
+      display:flex; align-items:center; gap:8px;
       background:#f8d000; color:#1a1a1a;
       font-size:.78rem; font-weight:800;
       padding:8px 14px; border-radius:99px;
@@ -82,8 +82,28 @@
     }
     .nav-99:active { transform:scale(.96); }
     @media(hover:hover){ .nav-99:hover{background:#e0bb00;} }
-    /* Esconde o 99 no nav em telas muito pequenas pra não apertar */
-    @media(max-width:380px){ .nav-99{ display:none; } }
+    /* Alternância iFood ↔ 99Food na nav em mobile */
+    @media(max-width:767px){
+      .nav-btn-wrap {
+        position:relative;
+        /* mesmas dimensões do maior botão para não tremer o layout */
+        width:90px; height:36px;
+      }
+      .nav-ifood, .nav-99 {
+        position:absolute; top:0; left:0;
+        width:100%; height:100%;
+        justify-content:center;
+        padding:0 10px;
+        transition: opacity .4s ease, transform .4s ease;
+        white-space:nowrap;
+      }
+      .nav-ifood { opacity:1; transform:translateY(0); z-index:2; }
+      .nav-99    { opacity:0; transform:translateY(6px); z-index:1; }
+      .nav-99.nav-active    { opacity:1; transform:translateY(0); z-index:2; }
+      .nav-ifood.nav-active { opacity:1; transform:translateY(0); z-index:2; }
+      .nav-ifood.nav-hidden { opacity:0; transform:translateY(-6px); z-index:1; }
+      .nav-99.nav-hidden    { opacity:0; transform:translateY(-6px); z-index:1; }
+    }
     .hamburger {
       display:flex; flex-direction:column; gap:5px;
       background:none; border:none; padding:6px; border-radius:8px; cursor:pointer;
@@ -447,7 +467,7 @@
     .mob-whats { background:var(--teal-lt); color:var(--teal-dk); }
 
     /* NAV LOGO IMG */
-    .nav-logo-img { height:52px; width:auto; display:block; }
+    .nav-logo-img { height:75px; width:auto; display:block; }
 
     /* 99FOOD button */
     .btn-99 {
@@ -477,7 +497,7 @@
     /* bico = brand icon <img> — SimpleIcons CDN oficial */
     .bico { display:inline-block; width:1.1em; height:1.1em; vertical-align:-.2em; flex-shrink:0; }
     /* 99Food: SVG inline (não está no SimpleIcons) */
-    .ico99 { display:inline-flex; align-items:center; justify-content:center;
+    .ico99 { display:inline-flex; align-items:right; justify-content:right;
              width:1.15em; height:1.15em; vertical-align:-.22em; flex-shrink:0; }
     .ico99 svg { width:100%; height:100%; }
   </style>
@@ -498,12 +518,14 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
-    <img src="assets/logo_retangular_transparente.png" alt="Crocks Frio" class="nav-logo-img" />
+    <img src="assets/logo_retangular_transparente2.png" alt="Crocks Frio" class="nav-logo-img" />
   </a>
   <div class="nav-right">
-    <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" class="nav-99"><span class="ico99"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> 99Food</a>
-    <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
-       target="_blank" class="nav-ifood"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> iFood</a>
+    <div class="nav-btn-wrap">
+      <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" class="nav-99"><span class="ico99"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span>Food</a>
+      <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
+         target="_blank" class="nav-ifood"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> iFood</a>
+    </div>
     <button class="hamburger" id="ham" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -522,7 +544,7 @@
     <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
        target="_blank" class="drawer-cta"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> Pedir pelo iFood</a>
     <a href="https://oia.99app.com/dlp9/PCzdq1"
-       target="_blank" class="drawer-cta" style="background:var(--orange);margin-top:8px;"><span class="ico99" style="color:#fff"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> Pedir pelo 99Food</a>
+       target="_blank" class="btn-99"></span>Pedir pelo 99Food</a>
   </div>
 </div>
 
@@ -535,7 +557,6 @@
       <h1 class="hero-h1">O sorvete<br><span class="hl">perfeito</span><br>espera por você!</h1>
       <p class="hero-sub">Mais de 60 sabores artesanais. Café especial, picolés, doces e sorvete pro seu pet! 🐾</p>
       <div class="hero-btns">
-        <a href="#produtos" class="btn-hero-main">Ver sabores 🍨</a>
         <a href="#localizacao" class="btn-hero-ghost">Como chegar 📍</a>
       </div>
     </div>
@@ -728,7 +749,7 @@
       <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
          target="_blank" class="btn-cta-main"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> Pedir pelo iFood</a>
       <a href="https://oia.99app.com/dlp9/PCzdq1"
-         target="_blank" class="btn-99"><span class="ico99" style="color:#1a1a1a"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> Pedir pelo 99Food</a>
+         target="_blank" class="btn-99">Pedir pelo 99Food</a>
       <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29"
          target="_blank" class="btn-cta-ghost"><img class="bico" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" aria-hidden="true"> WhatsApp</a>
     </div>
@@ -746,7 +767,7 @@
           <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" title="Instagram"><img style="width:18px;height:18px;filter:brightness(0) invert(1)" src="https://cdn.simpleicons.org/instagram" alt="Instagram"></a>
           <a href="https://api.whatsapp.com/send/?phone=558195140539" target="_blank" title="WhatsApp"><img style="width:18px;height:18px;filter:brightness(0) invert(1)" src="https://cdn.simpleicons.org/whatsapp" alt="WhatsApp"></a>
           <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77" target="_blank" title="iFood"><img style="width:18px;height:18px;filter:brightness(0) invert(1)" src="https://cdn.simpleicons.org/ifood" alt="iFood"></a>
-          <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" title="99Food"><span class="ico99" style="color:rgba(255,255,255,.7);width:20px;height:20px"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span></a>
+          <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" title="99Food"><span class="ico99" style="color:rgba(255,255,255,.7);width:22px;height:22px"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span></a>
         </div>
       </div>
       <div class="footer-links">
@@ -779,7 +800,7 @@
   <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
      target="_blank" class="mob-ifood"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> iFood</a>
   <a href="https://oia.99app.com/dlp9/PCzdq1"
-     target="_blank" class="mob-99"><span class="ico99" style="color:#1a1a1a"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> 99Food</a>
+     target="_blank" class="mob-99"><span class="ico99" style="color:#1a1a1a"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span>Food</a>
   <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29"
      target="_blank" class="mob-whats"><img class="bico" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" aria-hidden="true"> Whats</a>
 </div>
@@ -819,6 +840,30 @@
       if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
     })
   );
+  // Alternância iFood ↔ 99Food na nav em mobile
+  (function(){
+    var ifood = document.querySelector('.nav-ifood');
+    var n99   = document.querySelector('.nav-99');
+    var showingIfood = true;
+
+    function rotate(){
+      if(window.innerWidth >= 768) return; // só mobile
+      if(showingIfood){
+        ifood.classList.add('nav-hidden');
+        ifood.classList.remove('nav-active');
+        n99.classList.remove('nav-hidden');
+        n99.classList.add('nav-active');
+      } else {
+        n99.classList.add('nav-hidden');
+        n99.classList.remove('nav-active');
+        ifood.classList.remove('nav-hidden');
+        ifood.classList.add('nav-active');
+      }
+      showingIfood = !showingIfood;
+    }
+
+    setInterval(rotate, 3000);
+  })();
 </script>
 </body>
 </html>
