@@ -472,9 +472,28 @@
     .sr.d1{transition-delay:.1s} .sr.d2{transition-delay:.2s}
     .sr.d3{transition-delay:.3s} .sr.d4{transition-delay:.4s}
     .sr.visible { opacity:1; transform:none; }
+
+    /* ─── BRAND ICONS ─── */
+    /* bico = brand icon <img> — SimpleIcons CDN oficial */
+    .bico { display:inline-block; width:1.1em; height:1.1em; vertical-align:-.2em; flex-shrink:0; }
+    /* 99Food: SVG inline (não está no SimpleIcons) */
+    .ico99 { display:inline-flex; align-items:center; justify-content:center;
+             width:1.15em; height:1.15em; vertical-align:-.22em; flex-shrink:0; }
+    .ico99 svg { width:100%; height:100%; }
   </style>
 </head>
 <body>
+
+<!-- ─── SVG SPRITE: apenas 99Food (não disponível no SimpleIcons) ─── -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <!-- 99Food: wordmark "99" em bold, identidade visual da marca -->
+    <symbol id="ico-99" viewBox="0 0 30 22">
+      <text x="1" y="19" font-family="'Arial Black','Arial Narrow',Arial,sans-serif"
+            font-size="20" font-weight="900" letter-spacing="-1" fill="currentColor">99</text>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- NAV -->
 <nav id="nav">
@@ -482,9 +501,9 @@
     <img src="assets/logo_retangular_transparente.png" alt="Crocks Frio" class="nav-logo-img" />
   </a>
   <div class="nav-right">
-    <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" class="nav-99">🟡 99Food</a>
+    <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" class="nav-99"><span class="ico99"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> 99Food</a>
     <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
-       target="_blank" class="nav-ifood">🛵 iFood</a>
+       target="_blank" class="nav-ifood"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> iFood</a>
     <button class="hamburger" id="ham" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -499,11 +518,11 @@
     <a href="#galeria"     class="drawer-link">Galeria</a>
     <a href="#localizacao" class="drawer-link">Localização</a>
     <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29"
-       target="_blank" class="drawer-link">WhatsApp 💬</a>
+       target="_blank" class="drawer-link"><img class="bico" src="https://cdn.simpleicons.org/whatsapp/25D366" alt="" aria-hidden="true"> WhatsApp</a>
     <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
-       target="_blank" class="drawer-cta">🛵 Pedir pelo iFood</a>
+       target="_blank" class="drawer-cta"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> Pedir pelo iFood</a>
     <a href="https://oia.99app.com/dlp9/PCzdq1"
-       target="_blank" class="drawer-cta" style="background:var(--orange);margin-top:8px;">🟡 Pedir pelo 99Food</a>
+       target="_blank" class="drawer-cta" style="background:var(--orange);margin-top:8px;"><span class="ico99" style="color:#fff"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> Pedir pelo 99Food</a>
   </div>
 </div>
 
@@ -516,6 +535,7 @@
       <h1 class="hero-h1">O sorvete<br><span class="hl">perfeito</span><br>espera por você!</h1>
       <p class="hero-sub">Mais de 60 sabores artesanais. Café especial, picolés, doces e sorvete pro seu pet! 🐾</p>
       <div class="hero-btns">
+        <a href="#produtos" class="btn-hero-main">Ver sabores 🍨</a>
         <a href="#localizacao" class="btn-hero-ghost">Como chegar 📍</a>
       </div>
     </div>
@@ -616,7 +636,7 @@
           <div class="stat"><strong>14</strong><span>Anos</span></div>
           <div class="stat"><strong>★4.9</strong><span>Nota</span></div>
         </div>
-        <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" class="btn-sobre">📸 Ver no Instagram</a>
+        <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" class="btn-sobre"><img class="bico" src="https://cdn.simpleicons.org/instagram/ffffff" alt="" aria-hidden="true"> Ver no Instagram</a>
       </div>
     </div>
   </div>
@@ -654,7 +674,7 @@
     </div>
   </div>
   <div class="galeria-insta sr">
-    <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" class="btn-insta">📸 Ver perfil completo no Instagram</a>
+    <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" class="btn-insta"><img class="bico" src="https://cdn.simpleicons.org/instagram/ffffff" alt="" aria-hidden="true"> Ver perfil completo no Instagram</a>
   </div>
 </section>
 
@@ -679,18 +699,18 @@
           </a>
         </div>
         <div class="loc-item">
-          <div class="loc-item-icon">💬</div>
+          <div class="loc-item-icon"><img style="width:22px;height:22px" src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" aria-hidden="true"></div>
           <strong>WhatsApp</strong>
           <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29" target="_blank">(81) 99514-0539</a>
         </div>
         <div class="loc-item">
-          <div class="loc-item-icon">🛵</div>
+          <div class="loc-item-icon"><img style="width:22px;height:22px" src="https://cdn.simpleicons.org/ifood/EA1D2C" alt="iFood" aria-hidden="true"></div>
           <strong>Delivery</strong>
           <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share" target="_blank">iFood</a>
             <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank">99Food</a>
         </div>
         <div class="loc-item">
-          <div class="loc-item-icon">📸</div>
+          <div class="loc-item-icon"><img style="width:22px;height:22px" src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" aria-hidden="true"></div>
           <strong>Instagram</strong>
           <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank">@crocksfrio.oficial</a>
         </div>
@@ -706,11 +726,11 @@
     <p>Peça agora pelo iFood ou 99Food, fale no WhatsApp ou venha nos visitar!</p>
     <div class="cta-btns">
       <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
-         target="_blank" class="btn-cta-main">🛵 Pedir pelo iFood</a>
+         target="_blank" class="btn-cta-main"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> Pedir pelo iFood</a>
       <a href="https://oia.99app.com/dlp9/PCzdq1"
-         target="_blank" class="btn-99">🟡 Pedir pelo 99Food</a>
+         target="_blank" class="btn-99"><span class="ico99" style="color:#1a1a1a"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> Pedir pelo 99Food</a>
       <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29"
-         target="_blank" class="btn-cta-ghost">💬 WhatsApp</a>
+         target="_blank" class="btn-cta-ghost"><img class="bico" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" aria-hidden="true"> WhatsApp</a>
     </div>
   </div>
 </section>
@@ -723,10 +743,10 @@
         <img src="assets/logo_retangular_transparente.png" alt="Crocks Frio" class="footer-logo-img" />
         <p class="footer-desc">Sorvetes artesanais feitos com amor há mais de 14 anos. Recife–PE.</p>
         <div class="footer-social">
-          <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" title="Instagram">📸</a>
-          <a href="https://api.whatsapp.com/send/?phone=558195140539" target="_blank" title="WhatsApp">💬</a>
-          <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77" target="_blank" title="iFood">🛵</a>
-          <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" title="99Food">🟡</a>
+          <a href="https://www.instagram.com/crocksfrio.oficial/" target="_blank" title="Instagram"><img style="width:18px;height:18px;filter:brightness(0) invert(1)" src="https://cdn.simpleicons.org/instagram" alt="Instagram"></a>
+          <a href="https://api.whatsapp.com/send/?phone=558195140539" target="_blank" title="WhatsApp"><img style="width:18px;height:18px;filter:brightness(0) invert(1)" src="https://cdn.simpleicons.org/whatsapp" alt="WhatsApp"></a>
+          <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77" target="_blank" title="iFood"><img style="width:18px;height:18px;filter:brightness(0) invert(1)" src="https://cdn.simpleicons.org/ifood" alt="iFood"></a>
+          <a href="https://oia.99app.com/dlp9/PCzdq1" target="_blank" title="99Food"><span class="ico99" style="color:rgba(255,255,255,.7);width:20px;height:20px"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span></a>
         </div>
       </div>
       <div class="footer-links">
@@ -757,11 +777,11 @@
 <!-- MOBILE STICKY BAR -->
 <div class="mobile-bar">
   <a href="https://www.ifood.com.br/delivery/recife-pe/crocks-frio-sorvetes-artesanais-madalena/92778ff0-2f63-4556-a3b1-e4dbb29a6a77?UTM_Medium=share"
-     target="_blank" class="mob-ifood">🛵 iFood</a>
+     target="_blank" class="mob-ifood"><img class="bico" src="https://cdn.simpleicons.org/ifood/ffffff" alt="" aria-hidden="true"> iFood</a>
   <a href="https://oia.99app.com/dlp9/PCzdq1"
-     target="_blank" class="mob-99">🟡 99Food</a>
+     target="_blank" class="mob-99"><span class="ico99" style="color:#1a1a1a"><svg viewBox="0 0 30 22"><use href="#ico-99"/></svg></span> 99Food</a>
   <a href="https://api.whatsapp.com/send/?phone=558195140539&text=Vim+do+site+%3A%29"
-     target="_blank" class="mob-whats">💬 Whats</a>
+     target="_blank" class="mob-whats"><img class="bico" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" aria-hidden="true"> Whats</a>
 </div>
 
 <script>
