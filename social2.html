@@ -225,15 +225,40 @@
             setTimeout(() => { syncStatus.className = ''; }, 4000);
         }
 
-        // ─── Vídeos ───────────────────────────────────────────────────────
+        // ─── Vídeos (cache em memória via Blob URL) ───────────────────────
+        // Cada vídeo é baixado UMA única vez e fica armazenado como Blob URL.
+        // Nas reproduções seguintes o navegador usa o objeto em memória,
+        // sem nenhuma requisição de rede adicional.
+        const videoCache = {};   // url original → blob URL
+
+        async function preloadAllVideos() {
+            if (!config.videos || config.videos.length === 0) return;
+            await Promise.all(config.videos.map(url => cacheVideo(url)));
+        }
+
+        async function cacheVideo(url) {
+            if (videoCache[url]) return;           // já baixado
+            try {
+                const res  = await fetch(url);
+                const blob = await res.blob();
+                videoCache[url] = URL.createObjectURL(blob);
+                console.log(`Vídeo cacheado: ${url}`);
+            } catch (e) {
+                console.warn(`Falha ao cachear vídeo ${url}:`, e);
+                videoCache[url] = url;             // fallback: usa URL original
+            }
+        }
+
+        function blobOrFallback(url) {
+            return videoCache[url] || url;
+        }
+
         function playNextVideo() {
             if (!config.videos || config.videos.length === 0) return;
-            player.src = config.videos[videoIdx];
+            const currentUrl = config.videos[videoIdx];
+            player.src = blobOrFallback(currentUrl);
             player.play().catch(e => console.log('Erro Play:', e));
-            const nextIdx = (videoIdx + 1) % config.videos.length;
-            preloader.src = config.videos[nextIdx];
-            preloader.load();
-            videoIdx = nextIdx;
+            videoIdx = (videoIdx + 1) % config.videos.length;
         }
 
         player.onended = playNextVideo;
@@ -345,7 +370,8 @@
             // Preenche handle do Instagram
             document.getElementById('insta-handle').innerText = config.instagram.handle;
 
-            // Inicia vídeos
+            // Baixa todos os vídeos uma única vez e só então inicia a reprodução
+            await preloadAllVideos();
             playNextVideo();
 
             // Busca reviews agora e agenda recarga a cada 1h
