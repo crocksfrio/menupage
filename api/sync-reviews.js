@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     // ID do seu local no Google (Crocks Frio)
-    const placeId = process.env.GOOGLE_PLACE_ID || "ChIJ876mKjS1lZUR3-4eT5O1lZU";
+    const placeId = process.env.GOOGLE_PLACE_ID || "ChIJk9XMTWkZqwcR3-4eT5O11Yo";
     
     // A chave deve ser configurada nas Environment Variables (Variáveis de Ambiente) do Vercel
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;
