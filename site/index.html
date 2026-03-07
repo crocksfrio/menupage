@@ -187,7 +187,8 @@
       background:#fff; border-radius:40px; overflow:hidden;
       box-shadow:0 20px 60px rgba(0,0,0,.18); aspect-ratio:4/5;
     }
-    .hero-img-card img { width:100%; height:100%; object-fit:cover; }
+    .hero-img-card video,
+    .hero-img-card img { width:100%; height:100%; object-fit:cover; display:block; }
     .hero-badge {
       position:absolute; top:-16px; right:-8px;
       background:var(--orange); color:#fff;
@@ -482,9 +483,17 @@
       </div>
     </div>
     <div class="hero-img-wrap">
-      <div class="hero-img-card">
-        <img src="https://static.wixstatic.com/media/514c2f_ec6b620c68344b1c8d35890efac7cf54f000.jpg/v1/fill/w_480,h_628,al_c,q_80,enc_avif,quality_auto/514c2f_ec6b620c68344b1c8d35890efac7cf54f000.jpg"
-             alt="Sorvete artesanal Crocks Frio" loading="eager" />
+    <div class="hero-img-card">
+        <video
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          poster="https://static.wixstatic.com/media/514c2f_ec6b620c68344b1c8d35890efac7cf54f000.jpg/v1/fill/w_480,h_628,al_c,q_80,enc_avif,quality_auto/514c2f_ec6b620c68344b1c8d35890efac7cf54f000.jpg"
+        >
+          <source src="https://video.wixstatic.com/video/514c2f_ec6b620c68344b1c8d35890efac7cf54/480p/mp4/file.mp4" type="video/mp4" />
+        </video>
       </div>
       <div class="hero-badge"><strong>14</strong>anos de sabor!</div>
     </div>
