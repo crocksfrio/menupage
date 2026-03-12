@@ -18,7 +18,7 @@ const MENU_DATA = {
                 nome: "Clássico Crocks",
                 desc: "1x Clássico + Cookie ou Brownie",
                 preco_de: "27,80",
-                preco: "25,90"
+                preco: "26,90"
             },
             {
                 nome: "Frio & Expresso",
@@ -64,7 +64,7 @@ const MENU_DATA = {
         servicos: [
             { nome: "Pote", preco: "Padrão", img: "main/pote.jpg" },
             { nome: "Pote + Casquinha", preco: "+R$ 0,99", img: "main/potecasquinho.jpg" },
-            { nome: "Cestinha", preco: "+R$ 2,30", img: "main/cestinha.jpg" },
+            { nome: "Cestinha", preco: "+R$ 1,90", img: "main/cestinha.jpg" },
             { nome: "Cascão", preco: "+R$ 1,90", img: "main/cascao.jpg" }
         ]
     },
@@ -147,7 +147,7 @@ const MENU_DATA = {
         petit_gateau: {
             titulo: "Petit Gâteau",
             desc: "",
-            preco: "24,90",
+            preco: "25,90",
             tamanho_fonte: "0.95rem",
             img_fundo: "main/petitgateau.jpg"
         },
@@ -156,9 +156,9 @@ const MENU_DATA = {
                 titulo: "Cookies & Brownies",
                 cor: "teal",
                 itens: [
-                    { nome: "Cookie Belga", preco: "8,90" },
-                    { nome: "Brownie", preco: "8,90" },
-                    { nome: "Big Cookie Chocolatudo", preco: "13,90" }
+                    { nome: "Cookie Belga", preco: "9,90" },
+                    { nome: "Brownie", preco: "9,90" },
+                    { nome: "Big Cookie Chocolatudo", preco: "16,90" }
                 ]
             },
             {
@@ -174,8 +174,8 @@ const MENU_DATA = {
                 titulo: "Rings & Donuts",
                 cor: "orange",
                 itens: [
-                    { nome: "Ring Chocolate", preco: "16,90" },
-                    { nome: "Ring Frutas Vermelhas", preco: "16,90" },
+                    { nome: "Ring Chocolate", preco: "14,90" },
+                    { nome: "Ring Frutas Vermelhas", preco: "14,90" },
                 ]
             }
         ]
