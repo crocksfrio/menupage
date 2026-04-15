@@ -11,20 +11,20 @@ const MENU_DATA = {
             {
                 nome: "Alegria a Dois",
                 desc: "2x Clássico + 1 Fatia de Torta",
-                preco_de: "57,70",
-                preco: "49,90"
+                preco_de: "59,70",
+                preco: "52,90"
             },
             {
                 nome: "Clássico Crocks",
                 desc: "1x Clássico + Cookie ou Brownie",
-                preco_de: "27,80",
+                preco_de: "29,80",
                 preco: "26,90"
             },
             {
-                nome: "Frio & Expresso",
+                nome: "Clássico Cremoso",
                 desc: "1x Café + 1x Clássico",
                 preco_de: "27,80",
-                preco: "24,90"
+                preco: "25,90"
             }
         ]
     },
@@ -41,7 +41,7 @@ const MENU_DATA = {
             {
                 nome: "Clássico",
                 desc: "2 Bolas (180g). A dupla perfeita de sabores.",
-                preco: "18,90",
+                preco: "19,90",
                 tamanho_fonte: "0.95rem",
                 destaque: true,
                 tag: "O MAIS PEDIDO"
@@ -49,14 +49,14 @@ const MENU_DATA = {
             {
                 nome: "Master",
                 desc: "3 Bolas (270g). Três bolas de pura felicidade!",
-                preco: "27,90",
+                preco: "28,90",
                 tamanho_fonte: "0.95rem",
                 destaque: false
             },
             {
                 nome: "Extra Premium",
                 desc: "4 Bolas (360g). Experiência inesquecível de sabor.",
-                preco: "35,90",
+                preco: "36,90",
                 tamanho_fonte: "0.95rem",
                 destaque: false
             }
@@ -141,8 +141,8 @@ const MENU_DATA = {
         milkshake: {
             titulo: "Milkshakes",
             desc: "Cremosos e Artesanais",
-            p: { tamanho: "300ml (270g)", preco: "27,90" },
-            g: { tamanho: "500ml (450g)", preco: "39,90" }
+            p: { tamanho: "300ml (270g)", preco: "28,90" },
+            g: { tamanho: "500ml (450g)", preco: "44,90" }
         },
         petit_gateau: {
             titulo: "Petit Gâteau",
